@@ -307,7 +307,7 @@
                 <!-- REAL SURVEILLANCE OVERLAYS (Light Theme) -->
                 <!-- Bottom-Left overlay: Camera Name & Location with Record Dot -->
                 <div
-                    class="absolute bottom-[37px] left-3 sm:bottom-[41px] sm:left-4 z-20 bg-white/95 border border-slate-200 text-slate-800 font-mono-tech text-[8px] sm:text-[10px] tracking-wider px-2 py-0.5 sm:px-2.5 sm:py-1 pointer-events-none select-none shadow-sm rounded-md flex items-center space-x-1.5 sm:space-x-2">
+                    class="absolute bottom-2 left-2 sm:bottom-[37px] sm:left-4 md:bottom-[41px] z-20 bg-white/95 border border-slate-200 text-slate-800 font-mono-tech text-[8px] sm:text-[10px] tracking-wider px-2 py-0.5 sm:px-2.5 sm:py-1 pointer-events-none select-none shadow-sm rounded-md flex items-center space-x-1.5 sm:space-x-2">
                     <span class="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-rose-600 live-pulse shrink-0"></span>
                     <span>
                         <span id="cctv_overlay_name" class="font-bold text-slate-900">CAMERA</span> &bull; <span
@@ -317,7 +317,7 @@
 
                 <!-- Bottom-Right overlay: GPS coords (Hidden on mobile to prevent overlay collisions) -->
                 <div
-                    class="hidden md:block absolute bottom-[41px] right-4 z-20 bg-white/95 border border-slate-200 text-slate-800 font-mono-tech text-[10px] tracking-wider px-2.5 py-1 pointer-events-none select-none shadow-sm rounded-md">
+                    class="hidden md:block absolute md:bottom-[41px] right-4 z-20 bg-white/95 border border-slate-200 text-slate-800 font-mono-tech text-[10px] tracking-wider px-2.5 py-1 pointer-events-none select-none shadow-sm rounded-md">
                     GPS: <span id="cctv_overlay_coords" class="text-slate-600 font-bold">0.0000, 0.0000</span>
                 </div>
             </div>
@@ -701,6 +701,20 @@
             }
 
             document.getElementById('close_stream_modal').addEventListener('click', closeStreamModal);
+
+            // Backdrop click closing for mobile responsiveness
+            document.getElementById('stream_modal').addEventListener('click', function (e) {
+                if (e.target === this) {
+                    closeStreamModal();
+                }
+            });
+
+            // Escape key closing
+            document.addEventListener('keydown', function (e) {
+                if (e.key === 'Escape') {
+                    closeStreamModal();
+                }
+            });
 
             // Filter Event handlers
             document.getElementById('category_select').addEventListener('change', fetchCameras);
