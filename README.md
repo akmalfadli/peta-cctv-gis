@@ -17,6 +17,7 @@ Modul ini telah ditingkatkan dari pemantau video sederhana menjadi utilitas peme
 *   **Multi-Tileset Switcher**: Memungkinkan pengguna beralih jenis peta antara peta jalan (OSM), peta satelit, dan peta minimalis abu-abu (*gray*).
 
 ### 2. ⚙️ Manajemen Administrasi Premium (Backend)
+*   **Interactive Location Picker (GIS Form Map)**: Dilengkapi peta interaktif mini LeafletJS pada formulir Tambah & Edit Lokasi. Admin cukup mengklik peta atau menyeret penanda (*draggable marker*) merah untuk mengisi koordinat `Latitude` & `Longitude` secara otomatis.
 *   **Dashboard Statistik Telemetri**: Menampilkan 4 kartu statistik ringkas: Total Kamera, Kamera Online, Kamera Offline, dan Kamera Nonaktif dengan efek animasi saat kursor diarahkan.
 *   **Formulir Fleksibel (Optional Streams)**: Mengizinkan pembuatan entri lokasi murni koordinat. Pilihan *Tanpa Stream* secara dinamis mematikan kewajiban pengisian URL.
 *   **Sistem Telemetri Cek Kesehatan Otomatis (Health Check)**: Fitur pengecekan koneksi streaming yang melakukan ping berkala ke server CCTV. Kamera tanpa stream secara cerdas dilewati (*bypassed*) agar tetap ditandai "Online" tanpa memperlambat performa server.
@@ -122,17 +123,17 @@ Jalankan perintah berikut setiap **5 atau 10 menit**:
 ```
 *Sistem telemetri ini secara otomatis mengabaikan marker berlabel **Tanpa Stream** sehingga tidak membebani penggunaan CPU server.*
 
-### 📍 Cara Mendapatkan Koordinat Latitude & Longitude
-1. Buka [Google Maps](https://maps.google.com).
-2. Cari lokasi yang ingin ditandai.
-3. Klik kanan pada titik lokasi tersebut di peta.
-4. Klik angka koordinat yang muncul (misalnya: `-7.398311, 109.543266`) untuk menyalinnya secara otomatis.
-5. Tempelkan angka koordinat depan (misal: `-7.398311`) ke kolom **Latitude** dan angka belakang (misal: `109.543266`) ke kolom **Longitude** di form admin.
+### 📍 Menentukan Koordinat Menggunakan Interactive Picker
+1. Masuk ke halaman **Tambah Kamera/Tempat** atau **Edit**.
+2. Pada bagian kanan formulir, Anda akan melihat panel **Peta Mini GIS**.
+3. Cari lokasi desa Anda di dalam peta tersebut.
+4. **Klik langsung** pada titik peta atau **seret (drag) penanda merah** ke bangunan/lokasi tujuan.
+5. Kolom `Latitude` dan `Longitude` di atas peta akan terisi secara otomatis dengan presisi tinggi.
+6. Klik **Simpan Data Kamera** untuk menyimpan koordinat secara instan tanpa perlu menyalin manual dari situs lain!
 
 ---
 
 ## 📌 Rencana Pengembangan Selanjutnya (Roadmap)
 Untuk masa mendatang, modul ini sangat direkomendasikan untuk ditambahkan:
-1. **Interactive Location Picker**: Peta mini di formulir tambah/edit lokasi agar admin cukup mengklik peta untuk mendapatkan koordinat secara instan.
-2. **"Rute Navigasi" Button**: Menambahkan tombol penunjuk arah di popup marker publik yang terintegrasi langsung dengan rute Google Maps.
-3. **Pemberitahuan Darurat (Alert Tag)**: Menambahkan penanda darurat berkedip jika terjadi bencana alam, jalan ditutup, atau kegiatan warga.
+1. **"Rute Navigasi" Button**: Menambahkan tombol penunjuk arah di popup marker publik yang terintegrasi langsung dengan rute Google Maps.
+2. **Pemberitahuan Darurat (Alert Tag)**: Menambahkan penanda darurat berkedip jika terjadi bencana alam, jalan ditutup, atau kegiatan warga.
