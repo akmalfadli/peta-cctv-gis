@@ -516,12 +516,15 @@
                     var isOnline = cam.status === 'online';
                     var categoryName = cam.category || '';
                     var iconInfo = getCategoryIconAndColor(categoryName, isOnline);
+                    var hasStream = !!cam.stream_url;
 
                     // GIS DivIcon matching municipal square marker look
                     var iconHtml = `
                         <div class="relative w-7 h-7 flex items-center justify-center rounded-lg text-white shadow-md border-2 border-white transition-all duration-200" style="background-color: ${iconInfo.bgColor}">
                             <i class="${iconInfo.iconClass} text-[10px]"></i>
-                            <span class="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full border border-white ${iconInfo.statusDot} ${isOnline ? 'live-pulse' : ''}"></span>
+                            ${hasStream ? `
+                                <span class="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full border border-white ${iconInfo.statusDot} ${isOnline ? 'live-pulse' : ''}"></span>
+                            ` : ''}
                         </div>
                     `;
 
@@ -536,8 +539,6 @@
                         icon: customIcon
                     });
 
-                    // Check if place has an active livestream stream URL
-                    var hasStream = !!cam.stream_url;
                     var statusText = hasStream ? (isOnline ? '● ONLINE' : '● OFFLINE') : '● TEMPAT';
                     var statusClass = hasStream ? (isOnline ? 'text-emerald-700' : 'text-rose-600') : 'text-slate-500';
 
