@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -30,11 +31,16 @@
         }
     </script>
     <!-- Leaflet GIS CSS & MarkerCluster CSS -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/MarkerCluster.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/MarkerCluster.Default.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/MarkerCluster.css" />
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/MarkerCluster.Default.css" />
     <!-- Fonts: Inter for UI typography, Space Mono for coordinates/telemetry -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 
     <style>
@@ -44,23 +50,29 @@
             overflow: hidden;
             color: #1e293b;
         }
+
         .font-mono-tech {
             font-family: 'Space Mono', 'Courier New', monospace;
         }
+
         /* Custom operational scrollbar */
         ::-webkit-scrollbar {
             width: 4px;
             height: 4px;
         }
+
         ::-webkit-scrollbar-track {
             background: #f8fafc;
         }
+
         ::-webkit-scrollbar-thumb {
             background: #cbd5e1;
         }
+
         ::-webkit-scrollbar-thumb:hover {
             background: #94a3b8;
         }
+
         /* Leaflet Popups matching Utilitarian GIS theme */
         .leaflet-popup-content-wrapper {
             background: #ffffff !important;
@@ -71,22 +83,27 @@
             box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08) !important;
             overflow: hidden !important;
         }
+
         .leaflet-popup-content {
             margin: 0 !important;
             width: 260px !important;
         }
+
         .leaflet-popup-tip {
             background: #ffffff !important;
             border: 1px solid #cbd5e1 !important;
         }
+
         .leaflet-popup-close-button {
             color: #64748b !important;
             padding: 4px 6px !important;
             font-size: 13px !important;
         }
+
         .leaflet-popup-close-button:hover {
             color: #0f172a !important;
         }
+
         /* Compact Leaflet Marker style */
         .gis-marker-icon {
             display: flex;
@@ -94,39 +111,55 @@
             justify-content: center;
             border-radius: 50%;
             border: 2px solid #ffffff;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
             transition: transform 0.1s ease;
         }
+
         .gis-marker-icon:hover {
             transform: scale(1.1);
         }
+
         /* Flashing recording alert */
         @keyframes pulse-live {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.3; }
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.3;
+            }
         }
+
         .live-pulse {
             animation: pulse-live 1.2s infinite;
         }
     </style>
 </head>
+
 <body class="w-screen h-screen flex flex-col relative text-slate-800">
 
     <!-- 1. Compact Top Navigation Header (Height: 52px) -->
-    <header class="w-full h-[52px] bg-ops-panel border-b border-ops-border px-3 sm:px-4 flex items-center justify-between z-[1002] shrink-0">
+    <header
+        class="w-full h-[52px] bg-ops-panel border-b border-ops-border px-3 sm:px-4 flex items-center justify-between z-[1002] shrink-0">
         <div class="flex items-center space-x-2 sm:space-x-3 overflow-hidden mr-2">
             @if(!empty($desa->logo))
                 <img src="{{ gambar_desa($desa->logo) }}" alt="Logo" class="h-6 sm:h-7 w-auto shrink-0">
             @else
-                <div class="w-6 h-6 sm:w-7 sm:h-7 bg-ops-primary flex items-center justify-center text-white font-bold text-[10px] sm:text-xs shadow-sm rounded-md shrink-0">
+                <div
+                    class="w-6 h-6 sm:w-7 sm:h-7 bg-ops-primary flex items-center justify-center text-white font-bold text-[10px] sm:text-xs shadow-sm rounded-md shrink-0">
                     CCTV
                 </div>
             @endif
             <div class="overflow-hidden">
-                <h1 class="text-slate-900 font-extrabold text-[10px] sm:text-xs md:text-sm tracking-wider uppercase leading-none truncate max-w-[150px] xs:max-w-[220px] sm:max-w-[340px] md:max-w-none">
-                    PETA PEMANTAUAN CCTV &mdash; {{ strtoupper(setting('sebutan_desa') ?: 'DESA') }} {{ strtoupper($desa->nama_desa ?: 'WIRADESA') }}
+                <h1
+                    class="text-slate-900 font-extrabold text-[10px] sm:text-xs md:text-sm tracking-wider uppercase leading-none truncate max-w-[150px] xs:max-w-[220px] sm:max-w-[340px] md:max-w-none">
+                    PETA PEMANTAUAN CCTV &mdash; {{ strtoupper(setting('sebutan_desa') ?: 'DESA') }}
+                    {{ strtoupper($desa->nama_desa ?: 'WIRADESA') }}
                 </h1>
-                <p class="text-ops-textMuted text-[8px] sm:text-[10px] tracking-wider uppercase mt-0.5 font-semibold truncate">
+                <p
+                    class="text-ops-textMuted text-[8px] sm:text-[10px] tracking-wider uppercase mt-0.5 font-semibold truncate">
                     PEMERINTAH KABUPATEN PURBALINGGA &bull; PORTAL GIS
                 </p>
             </div>
@@ -134,12 +167,14 @@
 
         <!-- Minimal Navigation -->
         <div class="flex items-center space-x-2 sm:space-x-4 shrink-0">
-            <div class="hidden md:flex items-center space-x-1.5 bg-ops-bg border border-ops-border px-2.5 py-1 text-xs text-slate-700 font-bold rounded-md">
+            <div
+                class="hidden md:flex items-center space-x-1.5 bg-ops-bg border border-ops-border px-2.5 py-1 text-xs text-slate-700 font-bold rounded-md">
                 <i class="fa-regular fa-clock text-slate-400"></i>
                 <span id="live_clock">0000-00-00 00:00:00 WIB</span>
             </div>
             @if(can('l'))
-                <a href="{{ site_url('cctv_admin') }}" class="px-2 py-1 sm:px-2.5 sm:py-1 border border-ops-border bg-ops-bg hover:bg-slate-200 text-slate-700 hover:text-slate-900 text-[10px] sm:text-xs font-bold uppercase rounded-md transition">
+                <a href="{{ site_url('cctv_admin') }}"
+                    class="px-2 py-1 sm:px-2.5 sm:py-1 border border-ops-border bg-ops-bg hover:bg-slate-200 text-slate-700 hover:text-slate-900 text-[10px] sm:text-xs font-bold uppercase rounded-md transition">
                     <i class="fa-solid fa-gear sm:mr-1"></i><span class="hidden sm:inline">ADMINISTRASI</span>
                 </a>
             @endif
@@ -147,8 +182,9 @@
     </header>
 
     <!-- 2. Compact Horizontal Search & Filter Bar (Toolbar Structure) -->
-    <section class="w-full h-12 bg-ops-bg border-b border-ops-border px-3 sm:px-4 flex flex-row items-center justify-between gap-4 z-[1002] shrink-0 overflow-x-auto scrollbar-thin">
-        
+    <section
+        class="w-full h-12 bg-ops-bg border-b border-ops-border px-3 sm:px-4 flex flex-row items-center justify-between gap-4 z-[1002] shrink-0 overflow-x-auto scrollbar-thin">
+
         <!-- Filters (Left side) -->
         <div class="flex items-center space-x-2 shrink-0 py-1">
             <!-- Search field -->
@@ -156,11 +192,14 @@
                 <span class="absolute inset-y-0 left-0 flex items-center pl-2.5 text-slate-400 text-xs">
                     <i class="fa-solid fa-magnifying-glass"></i>
                 </span>
-                <input type="text" id="search_input" class="w-36 sm:w-44 md:w-52 bg-white border border-ops-border rounded-md py-1 pl-7 pr-2 h-8 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-slate-400 uppercase" placeholder="CARI KAMERA...">
+                <input type="text" id="search_input"
+                    class="w-36 sm:w-44 md:w-52 bg-white border border-ops-border rounded-md py-1 pl-7 pr-2 h-8 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-slate-400 uppercase"
+                    placeholder="CARI KAMERA...">
             </div>
 
             <!-- Category select -->
-            <select id="category_select" class="bg-white border border-ops-border rounded-md px-2 h-8 text-xs text-slate-900 focus:outline-none">
+            <select id="category_select"
+                class="bg-white border border-ops-border rounded-md px-2 h-8 text-xs text-slate-900 focus:outline-none">
                 <option value="">KATEGORI</option>
                 @foreach ($categories as $cat)
                     <option value="{{ $cat->id }}">{{ strtoupper($cat->name) }}</option>
@@ -168,14 +207,16 @@
             </select>
 
             <!-- Status select -->
-            <select id="status_select" class="bg-white border border-ops-border rounded-md px-2 h-8 text-xs text-slate-900 focus:outline-none">
+            <select id="status_select"
+                class="bg-white border border-ops-border rounded-md px-2 h-8 text-xs text-slate-900 focus:outline-none">
                 <option value="">STATUS</option>
                 <option value="online">● ONLINE</option>
                 <option value="offline">● OFFLINE</option>
             </select>
 
             <!-- Reset filter button -->
-            <button id="btn_reset_filter" class="h-8 border border-ops-border bg-white hover:bg-slate-100 text-slate-600 hover:text-slate-900 px-2.5 text-xs font-bold uppercase rounded-md transition flex items-center space-x-1">
+            <button id="btn_reset_filter"
+                class="h-8 border border-ops-border bg-white hover:bg-slate-100 text-slate-600 hover:text-slate-900 px-2.5 text-xs font-bold uppercase rounded-md transition flex items-center space-x-1">
                 <i class="fa-solid fa-undo"></i>
                 <span class="hidden xs:inline">RESET</span>
             </button>
@@ -187,24 +228,31 @@
     <main id="map" class="flex-1 w-full z-[100] relative bg-slate-100"></main>
 
     <!-- Muted Base Map switcher & GIS Status Legend (Bottom-Left Map Overlays) -->
-    <div class="absolute bottom-4 left-3 sm:bottom-6 sm:left-4 z-[1000] flex flex-col md:flex-row items-start md:items-center gap-2 select-none">
-        
+    <div
+        class="absolute bottom-4 left-3 sm:bottom-6 sm:left-4 z-[1000] flex flex-col md:flex-row items-start md:items-center gap-2 select-none">
+
         <!-- Tileset switcher -->
-        <div class="flex items-center space-x-1 sm:space-x-1.5 bg-ops-panel border border-ops-border p-1 shadow-sm rounded-md">
-            <span class="hidden sm:inline text-[10px] font-bold text-slate-400 tracking-wider px-1.5 uppercase">TILESET:</span>
-            <button id="btn_layer_street" class="px-2 py-0.5 sm:px-2.5 sm:py-1 text-[9px] sm:text-xs font-bold uppercase transition bg-ops-primary text-white border border-ops-primary rounded">
+        <div
+            class="flex items-center space-x-1 sm:space-x-1.5 bg-ops-panel border border-ops-border p-1 shadow-sm rounded-md">
+            <span
+                class="hidden sm:inline text-[10px] font-bold text-slate-400 tracking-wider px-1.5 uppercase">TILESET:</span>
+            <button id="btn_layer_street"
+                class="px-2 py-0.5 sm:px-2.5 sm:py-1 text-[9px] sm:text-xs font-bold uppercase transition bg-ops-primary text-white border border-ops-primary rounded">
                 OSM
             </button>
-            <button id="btn_layer_light" class="px-2 py-0.5 sm:px-2.5 sm:py-1 text-[9px] sm:text-xs font-bold uppercase transition hover:bg-slate-100 text-slate-600 rounded">
+            <button id="btn_layer_light"
+                class="px-2 py-0.5 sm:px-2.5 sm:py-1 text-[9px] sm:text-xs font-bold uppercase transition hover:bg-slate-100 text-slate-600 rounded">
                 GRAY
             </button>
-            <button id="btn_layer_satellite" class="px-2 py-0.5 sm:px-2.5 sm:py-1 text-[9px] sm:text-xs font-bold uppercase transition hover:bg-slate-100 text-slate-600 rounded">
+            <button id="btn_layer_satellite"
+                class="px-2 py-0.5 sm:px-2.5 sm:py-1 text-[9px] sm:text-xs font-bold uppercase transition hover:bg-slate-100 text-slate-600 rounded">
                 SAT
             </button>
         </div>
 
         <!-- GIS Status Legend & Summary Overlay -->
-        <div class="flex flex-row items-center gap-2 sm:gap-3 bg-ops-panel border border-ops-border p-1.5 shadow-sm rounded-md text-[10px] sm:text-xs font-semibold">
+        <div
+            class="flex flex-row items-center gap-2 sm:gap-3 bg-ops-panel border border-ops-border p-1.5 shadow-sm rounded-md text-[10px] sm:text-xs font-semibold">
             <!-- Camera Ingested stats -->
             <div class="flex items-center space-x-2 text-slate-500">
                 <span>TOT: <strong class="text-slate-900" id="stats_total">0</strong></span>
@@ -213,7 +261,7 @@
                 <span class="h-2.5 w-[1px] bg-ops-border"></span>
                 <span>OFF: <strong class="text-rose-600" id="stats_offline">0</strong></span>
             </div>
-            
+
             <div class="hidden sm:block h-3 w-[1px] bg-ops-border"></div>
 
             <!-- Muted legend tags -->
@@ -244,44 +292,52 @@
     </div>
 
     <!-- 4. Playback Surveillance theater mode modal (YouTube/CCTV look) -->
-    <div id="stream_modal" class="fixed inset-0 z-[2000] hidden items-center justify-center bg-slate-900/40 backdrop-blur-sm p-2 md:p-6 transition-all duration-150">
-        
+    <div id="stream_modal"
+        class="fixed inset-0 z-[2000] hidden items-center justify-center bg-slate-900/40 backdrop-blur-sm p-2 md:p-6 transition-all duration-150">
+
         <!-- Clean operational surveillance viewport container -->
-        <div class="relative w-full max-w-4xl bg-white border border-ops-border shadow-2xl flex flex-col rounded-md overflow-hidden">
-            
+        <div
+            class="relative w-full max-w-4xl bg-white border border-ops-border shadow-2xl flex flex-col rounded-md overflow-hidden">
+
             <!-- Video Frame (surveillance HUD) -->
-            <div class="bg-black aspect-video flex items-center justify-center relative w-full overflow-hidden" id="player_viewport_wrapper">
+            <div class="bg-black aspect-video flex items-center justify-center relative w-full overflow-hidden"
+                id="player_viewport_wrapper">
                 <div id="player_viewport" class="w-full h-full flex items-center justify-center"></div>
 
                 <!-- REAL SURVEILLANCE OVERLAYS (Light Theme) -->
                 <!-- Bottom-Left overlay: Camera Name & Location with Record Dot -->
-                <div class="absolute bottom-3 left-3 sm:bottom-4 sm:left-4 z-20 bg-white/95 border border-slate-200 text-slate-800 font-mono-tech text-[8px] sm:text-[10px] tracking-wider px-2 py-0.5 sm:px-2.5 sm:py-1 pointer-events-none select-none uppercase shadow-sm rounded-md flex items-center space-x-1.5 sm:space-x-2">
+                <div
+                    class="absolute bottom-3 left-3 sm:bottom-4 sm:left-4 z-20 bg-white/95 border border-slate-200 text-slate-800 font-mono-tech text-[8px] sm:text-[10px] tracking-wider px-2 py-0.5 sm:px-2.5 sm:py-1 pointer-events-none select-none uppercase shadow-sm rounded-md flex items-center space-x-1.5 sm:space-x-2">
                     <span class="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-rose-600 live-pulse shrink-0"></span>
                     <span>
-                        <span id="cctv_overlay_name" class="font-bold text-slate-900">CAMERA</span> &bull; <span id="cctv_overlay_desc" class="text-slate-600">LOCATION</span>
+                        <span id="cctv_overlay_name" class="font-bold text-slate-900">CAMERA</span> &bull; <span
+                            id="cctv_overlay_desc" class="text-slate-600">LOCATION</span>
                     </span>
                 </div>
 
                 <!-- Bottom-Right overlay: GPS coords (Hidden on mobile to prevent overlay collisions) -->
-                <div class="hidden md:block absolute bottom-4 right-4 z-20 bg-white/95 border border-slate-200 text-slate-800 font-mono-tech text-[10px] tracking-wider px-2.5 py-1 pointer-events-none select-none shadow-sm rounded-md">
+                <div
+                    class="hidden md:block absolute bottom-4 right-4 z-20 bg-white/95 border border-slate-200 text-slate-800 font-mono-tech text-[10px] tracking-wider px-2.5 py-1 pointer-events-none select-none shadow-sm rounded-md">
                     GPS: <span id="cctv_overlay_coords" class="text-slate-600 font-bold">0.0000, 0.0000</span>
                 </div>
             </div>
         </div>
 
         <!-- Theater mode absolute close button -->
-        <button id="close_stream_modal" class="absolute top-4 right-4 z-[2010] text-slate-700 hover:text-slate-900 border border-slate-300 bg-white hover:bg-slate-100 px-3 py-1.5 text-[9px] sm:text-[10px] font-mono-tech font-bold uppercase cursor-pointer rounded-md shadow-sm transition">
+        <button id="close_stream_modal"
+            class="absolute top-4 right-4 z-[2010] text-slate-700 hover:text-slate-900 border border-slate-300 bg-white hover:bg-slate-100 px-3 py-1.5 text-[9px] sm:text-[10px] font-mono-tech font-bold uppercase cursor-pointer rounded-md shadow-sm transition">
             [ CLOSE ]
         </button>
     </div>
 
     <!-- Leaflet JS & MarkerCluster JS & Hls.js -->
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/leaflet.markercluster.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/hls.js@1.4.12/dist/hls.min.js"></script>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             var camerasData = [];
             var hlsPlayer = null;
 
@@ -302,15 +358,15 @@
             updateClock();
 
             // Default Map coordinate setup (Wiradesa Center)
-            var defaultLat = {{ !empty($desa->lat) ? (float)$desa->lat : -7.382046 }};
-            var defaultLng = {{ !empty($desa->lng) ? (float)$desa->lng : 109.364406 }};
+            var defaultLat = {{ !empty($desa->lat) ? (float) $desa->lat : -7.382046 }};
+            var defaultLng = {{ !empty($desa->lng) ? (float) $desa->lng : 109.364406 }};
 
             // Initialize Leaflet Viewport (standard Leaflet controls)
             var map = L.map('map', {
                 zoomControl: false,
                 attributionControl: false,
                 maxZoom: 21
-            }).setView([defaultLat, defaultLng], 15);
+            }).setView([defaultLat, defaultLng], 16);
 
             L.control.zoom({
                 position: 'bottomright'
@@ -343,7 +399,7 @@
                 map.removeLayer(layerStreet);
                 map.removeLayer(layerLight);
                 map.removeLayer(layerSatellite);
-                
+
                 activeLayer.addTo(map);
 
                 // Update active button styling
@@ -391,10 +447,10 @@
                 var categoryId = document.getElementById('category_select').value;
                 var status = document.getElementById('status_select').value;
                 var search = document.getElementById('search_input').value;
-                
-                var url = "{{ ci_route('cctv.api_cameras') }}?search=" + encodeURIComponent(search) + 
-                          "&category_id=" + categoryId + 
-                          "&status=" + status;
+
+                var url = "{{ ci_route('cctv.api_cameras') }}?search=" + encodeURIComponent(search) +
+                    "&category_id=" + categoryId +
+                    "&status=" + status;
 
                 fetch(url)
                     .then(response => response.json())
@@ -423,11 +479,11 @@
             function getCategoryIconAndColor(categoryName, isOnline) {
                 var name = (categoryName || '').toLowerCase();
                 var statusDot = isOnline ? 'bg-emerald-500' : 'bg-rose-500';
-                
+
                 // Defaults (Standard CCTV)
                 var iconClass = 'fa-solid fa-video';
                 var bgColor = isOnline ? '#10b981' : '#ef4444'; // Emerald-500 / Rose-500
-                
+
                 if (name.includes('sekolah') || name.includes('school') || name.includes('sd') || name.includes('smp') || name.includes('sma') || name.includes('madrasah') || name.includes('tk') || name.includes('paud')) {
                     iconClass = 'fa-solid fa-graduation-cap';
                     bgColor = '#3b82f6'; // Blue-500
@@ -447,7 +503,7 @@
                     iconClass = 'fa-solid fa-house-chimney-medical';
                     bgColor = '#e11d48'; // Rose-600
                 }
-                
+
                 return { iconClass: iconClass, bgColor: bgColor, statusDot: statusDot };
             }
 
@@ -492,10 +548,10 @@
                                 <span class="truncate pr-1">${cam.name}</span>
                                 <span class="${statusClass} shrink-0">${statusText}</span>
                             </div>
-                            ${cam.thumbnail ? 
-                              `<div class="aspect-video w-full bg-cover bg-center border border-slate-200 mb-2" style="background-image: url('${cam.thumbnail}')"></div>` : 
-                              `<div class="aspect-video w-full bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-400 mb-2 font-semibold text-[10px]">NO PHOTO CACHE</div>`
-                            }
+                            ${cam.thumbnail ?
+                            `<div class="aspect-video w-full bg-cover bg-center border border-slate-200 mb-2" style="background-image: url('${cam.thumbnail}')"></div>` :
+                            `<div class="aspect-video w-full bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-400 mb-2 font-semibold text-[10px]">NO PHOTO CACHE</div>`
+                        }
                             <div class="text-[11px] text-slate-500 mb-2.5 uppercase font-medium">
                                 Lokasi: ${cam.description || 'Marker Lokasi Desa'}
                             </div>
@@ -518,7 +574,7 @@
             }
 
             // --- survaillance theater mode modal playback ---
-            window.openStreamModal = function(id) {
+            window.openStreamModal = function (id) {
                 console.log("openStreamModal triggered for ID:", id, "Type:", typeof id);
                 var cam = camerasData.find(c => String(c.id) === String(id));
                 if (!cam) {
@@ -529,7 +585,7 @@
                 // Load modal overlays
                 document.getElementById('cctv_overlay_name').innerText = cam.name;
                 document.getElementById('cctv_overlay_desc').innerText = cam.description || 'BALAI DESA';
-                
+
                 var lat = typeof cam.latitude === 'number' ? cam.latitude : parseFloat(cam.latitude) || 0;
                 var lng = typeof cam.longitude === 'number' ? cam.longitude : parseFloat(cam.longitude) || 0;
                 document.getElementById('cctv_overlay_coords').innerText = lat.toFixed(4) + ', ' + lng.toFixed(4);
@@ -595,7 +651,7 @@
             function createCctvConnectOverlay(videoEl, playCallback, status) {
                 var overlay = document.createElement('div');
                 overlay.className = 'absolute inset-0 bg-white/95 flex flex-col items-center justify-center cursor-pointer z-10 border border-slate-200';
-                
+
                 if (status === 'offline') {
                     overlay.innerHTML = `
                         <span class="text-rose-700 text-[10px] font-bold font-mono-tech tracking-wider uppercase border border-rose-300 bg-rose-50 px-2.5 py-1 mb-1 shadow-sm">[!] FEED OFFLINE</span>
@@ -611,7 +667,7 @@
                     </div>
                     <span class="text-slate-600 text-[9px] font-bold font-mono-tech tracking-wider uppercase">CONNECT LIVE STREAM</span>
                 `;
-                
+
                 videoEl.parentNode.appendChild(overlay);
 
                 overlay.addEventListener('click', () => {
@@ -628,12 +684,12 @@
 
                 var viewport = document.getElementById('player_viewport');
                 var video = document.getElementById('video_player');
-                
+
                 if (hlsPlayer) {
                     hlsPlayer.destroy();
                     hlsPlayer = null;
                 }
-                
+
                 if (video) {
                     video.pause();
                     video.removeAttribute('src');
@@ -650,7 +706,7 @@
             document.getElementById('status_select').addEventListener('change', fetchCameras);
 
             // Reset filters
-            document.getElementById('btn_reset_filter').addEventListener('click', function() {
+            document.getElementById('btn_reset_filter').addEventListener('click', function () {
                 document.getElementById('search_input').value = '';
                 document.getElementById('category_select').value = '';
                 document.getElementById('status_select').value = '';
@@ -659,11 +715,12 @@
 
             // Debounced Search key-ups (400ms buffer)
             var searchTimeout = null;
-            document.getElementById('search_input').addEventListener('input', function() {
+            document.getElementById('search_input').addEventListener('input', function () {
                 clearTimeout(searchTimeout);
                 searchTimeout = setTimeout(fetchCameras, 400);
             });
         });
     </script>
 </body>
+
 </html>
