@@ -326,7 +326,7 @@
         <!-- Theater mode absolute close button -->
         <button id="close_stream_modal"
             class="absolute top-4 right-4 z-[2010] text-slate-700 hover:text-slate-900 border border-slate-300 bg-white hover:bg-slate-100 px-3 py-1.5 text-[9px] sm:text-[10px] font-mono-tech font-bold uppercase cursor-pointer rounded-md shadow-sm transition">
-            [ CLOSE ]
+            CLOSE
         </button>
     </div>
 
