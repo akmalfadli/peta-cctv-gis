@@ -1,0 +1,18 @@
+{
+    "name": "PetaCCTV",
+    "alias": "Modul Peta CCTV",
+    "description": "Modul Pemetaan dan Live Streaming CCTV Desa Terintegrasi untuk OpenSID",
+    "keywords": [
+        "cctv",
+        "peta",
+        "gis",
+        "streaming",
+        "monitoring"
+    ],
+    "priority": 1,
+    "providers": [
+        "Modules\\PetaCCTV\\Providers\\PetaCCTVServiceProvider"
+    ],
+    "files": [],
+    "version": "1.0.0"
+}
