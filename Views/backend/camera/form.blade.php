@@ -210,13 +210,30 @@
             var startLng = cameraLng !== '' ? parseFloat(cameraLng) : defaultLng;
             var startZoom = cameraLat !== '' ? 16 : 14;
 
-            // Initialize Map
-            var map = L.map('map_picker').setView([startLat, startLng], startZoom);
-
-            // Layer OSM
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            // Establish base maps
+            var layerStreet = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 maxZoom: 19,
                 attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            });
+
+            var layerSatellite = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+                maxZoom: 19,
+                attribution: '&copy; Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+            });
+
+            // Initialize Map with default Street View
+            var map = L.map('map_picker', {
+                layers: [layerStreet]
+            }).setView([startLat, startLng], startZoom);
+
+            // Add Layer Control for base map switching (Street vs Satellite)
+            var baseMaps = {
+                "Peta Jalan": layerStreet,
+                "Satelit": layerSatellite
+            };
+
+            L.control.layers(baseMaps, null, {
+                position: 'topright'
             }).addTo(map);
 
             // Marker
