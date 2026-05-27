@@ -1,14 +1,13 @@
 <?php
 
 /*
- *
  * File ini bagian dari:
  *
- * Modul Peta CCTV untuk OpenSID
+ * Modul Peta GIS untuk OpenSID
  *
  * Modul ini dikembangkan untuk menambah fitur aplikasi OpenSID
  *
- * @package   Modul Peta CCTV untuk OpenSID
+ * @package   Modul Peta GIS untuk OpenSID
  * @author    Akmal Fadli
  * @license   http://www.gnu.org/licenses/gpl.html GPL V3
  *
@@ -24,8 +23,10 @@ return new class () extends Migration {
      */
     public function up(): void
     {
-        if (!Schema::hasTable('cctv_cameras')) {
-            Schema::create('cctv_cameras', static function (Blueprint $table) {
+        if (Schema::hasTable('cctv_cameras')) {
+            Schema::rename('cctv_cameras', 'gis_cameras');
+        } elseif (!Schema::hasTable('gis_cameras')) {
+            Schema::create('gis_cameras', static function (Blueprint $table) {
                 $table->bigIncrements('id');
                 $table->configId();
                 $table->string('name', 255);
@@ -42,9 +43,9 @@ return new class () extends Migration {
                 $table->dateTime('last_online_at')->nullable();
                 $table->timestamps();
 
-                $table->index('category_id', 'cctv_cameras_category_fk');
-                $table->foreign('category_id', 'cctv_cameras_category_fk')
-                    ->references('id')->on('cctv_categories')
+                $table->index('category_id', 'gis_cameras_category_fk');
+                $table->foreign('category_id', 'gis_cameras_category_fk')
+                    ->references('id')->on('gis_categories')
                     ->onUpdate('cascade')
                     ->onDelete('set null');
             });
@@ -56,6 +57,6 @@ return new class () extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('cctv_cameras');
+        Schema::dropIfExists('gis_cameras');
     }
 };

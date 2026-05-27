@@ -1,29 +1,28 @@
 <?php
 
 /*
- *
  * File ini bagian dari:
  *
- * Modul Peta CCTV untuk OpenSID
+ * Modul Peta GIS untuk OpenSID
  *
  * Modul ini dikembangkan untuk menambah fitur aplikasi OpenSID
  *
- * @package   Modul Peta CCTV untuk OpenSID
+ * @package   Modul Peta GIS untuk OpenSID
  * @author    Akmal Fadli
  * @license   http://www.gnu.org/licenses/gpl.html GPL V3
  *
  */
 
 use Illuminate\Support\Facades\DB;
-use Modules\PetaCCTV\Models\CctvCategory;
+use Modules\PetaGIS\Models\GisCategory;
 
 defined('BASEPATH') || exit('No direct script access allowed');
 
-class CctvCategoryController extends AdminModulController
+class GisCategoryAdminController extends AdminModulController
 {
-    public $moduleName = 'PetaCCTV';
-    public $modul_ini = 'cctv';
-    public $sub_modul_ini = 'cctv-category';
+    public $moduleName = 'PetaGIS';
+    public $modul_ini = 'gis';
+    public $sub_modul_ini = 'gis-category';
 
     public function __construct()
     {
@@ -32,15 +31,15 @@ class CctvCategoryController extends AdminModulController
     }
 
     /**
-     * Tampilkan daftar kategori CCTV.
+     * Tampilkan daftar kategori GIS.
      */
     public function index()
     {
-        $categories = CctvCategory::withCount('cameras')->orderBy('name', 'asc')->get();
+        $categories = GisCategory::withCount('cameras')->orderBy('name', 'asc')->get();
 
-        return view('cctv::backend.category.index', [
+        return view('gis::backend.category.index', [
             'categories' => $categories,
-            'title' => 'Manajemen Kategori CCTV',
+            'title' => 'Manajemen Kategori GIS',
         ]);
     }
 
@@ -55,13 +54,13 @@ class CctvCategoryController extends AdminModulController
 
         if (empty($name)) {
             set_session('error', 'Nama kategori tidak boleh kosong.');
-            return redirect('cctv_category');
+            return redirect('gis_category');
         }
 
         DB::beginTransaction();
 
         try {
-            CctvCategory::create([
+            GisCategory::create([
                 'config_id' => identitas('id'),
                 'name' => $name,
             ]);
@@ -73,7 +72,7 @@ class CctvCategoryController extends AdminModulController
             set_session('error', 'Gagal menambahkan kategori: ' . $e->getMessage());
         }
 
-        return redirect('cctv_category');
+        return redirect('gis_category');
     }
 
     /**
@@ -83,12 +82,12 @@ class CctvCategoryController extends AdminModulController
     {
         isCan('u', $this->modul_ini);
 
-        $category = CctvCategory::findOrFail($id);
+        $category = GisCategory::findOrFail($id);
         $name = trim(ci()->input->post('name') ?: '');
 
         if (empty($name)) {
             set_session('error', 'Nama kategori tidak boleh kosong.');
-            return redirect('cctv_category');
+            return redirect('gis_category');
         }
 
         DB::beginTransaction();
@@ -105,7 +104,7 @@ class CctvCategoryController extends AdminModulController
             set_session('error', 'Gagal memperbarui kategori: ' . $e->getMessage());
         }
 
-        return redirect('cctv_category');
+        return redirect('gis_category');
     }
 
     /**
@@ -115,7 +114,7 @@ class CctvCategoryController extends AdminModulController
     {
         isCan('h', $this->modul_ini);
 
-        $category = CctvCategory::findOrFail($id);
+        $category = GisCategory::findOrFail($id);
 
         DB::beginTransaction();
 
@@ -130,6 +129,6 @@ class CctvCategoryController extends AdminModulController
             set_session('error', 'Gagal menghapus kategori: ' . $e->getMessage());
         }
 
-        return redirect('cctv_category');
+        return redirect('gis_category');
     }
 }

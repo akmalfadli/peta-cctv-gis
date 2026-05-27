@@ -1,14 +1,13 @@
 <?php
 
 /*
- *
  * File ini bagian dari:
  *
- * Modul Peta CCTV untuk OpenSID
+ * Modul Peta GIS untuk OpenSID
  *
  * Modul ini dikembangkan untuk menambah fitur aplikasi OpenSID
  *
- * @package   Modul Peta CCTV untuk OpenSID
+ * @package   Modul Peta GIS untuk OpenSID
  * @author    Akmal Fadli
  * @license   http://www.gnu.org/licenses/gpl.html GPL V3
  *
@@ -24,8 +23,10 @@ return new class () extends Migration {
      */
     public function up(): void
     {
-        if (!Schema::hasTable('cctv_categories')) {
-            Schema::create('cctv_categories', static function (Blueprint $table) {
+        if (Schema::hasTable('cctv_categories')) {
+            Schema::rename('cctv_categories', 'gis_categories');
+        } elseif (!Schema::hasTable('gis_categories')) {
+            Schema::create('gis_categories', static function (Blueprint $table) {
                 $table->bigIncrements('id');
                 $table->configId();
                 $table->string('name', 255);
@@ -39,6 +40,6 @@ return new class () extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('cctv_categories');
+        Schema::dropIfExists('gis_categories');
     }
 };

@@ -6,7 +6,7 @@
 
 @section('breadcrumb')
     <li><a href="{{ site_url('hom_sid') }}"><i class="fa fa-dashboard"></i> Home</a></li>
-    <li><a href="{{ site_url('cctv_admin') }}">Daftar Kamera CCTV</a></li>
+    <li><a href="{{ site_url('gis_camera') }}">Daftar Kamera CCTV</a></li>
     <li class="active">Pengaturan Integrasi Cuaca</li>
 @endsection
 
@@ -32,10 +32,10 @@
                 <div class="box box-primary">
                     <div class="box-header with-border">
                         <h3 class="box-title">Konfigurasi Cuaca OpenWeatherMap</h3>
-                        <a href="{{ site_url('cctv_admin') }}" class="btn btn-default btn-xs pull-right"><i class="fa fa-arrow-left"></i> Kembali ke Daftar</a>
+                        <a href="{{ site_url('gis_camera') }}" class="btn btn-default btn-xs pull-right"><i class="fa fa-arrow-left"></i> Kembali ke Daftar</a>
                     </div>
 
-                    {!! form_open(ci_route('cctv_admin.settings'), ['class' => 'form-horizontal']) !!}
+                    {!! form_open(ci_route('gis_camera.settings'), ['class' => 'form-horizontal']) !!}
                     <div class="box-body">
                         <div class="form-group">
                             <label class="col-sm-3 control-label">Aktifkan Weather Widget</label>
@@ -43,7 +43,7 @@
                                 <div class="checkbox">
                                     <label>
                                         <input type="checkbox" name="weather_enabled" value="1" {{ $weather_enabled ? 'checked' : '' }}>
-                                        Tampilkan widget info cuaca real-time di pojok kanan atas Peta CCTV Publik.
+                                        Tampilkan widget info cuaca real-time di pojok kanan atas Peta GIS Publik.
                                     </label>
                                 </div>
                             </div>
@@ -81,6 +81,7 @@
                                         <li>Lakukan registrasi akun baru (Akun Free/Gratis sudah sangat cukup untuk mencakup pemanggilan reguler desa).</li>
                                         <li>Setelah masuk, buka menu <strong>"My API Keys"</strong> pada akun profil Anda.</li>
                                         <li>Salin 32 karakter kode API Key yang digenerasi oleh sistem, lalu tempelkan pada kolom di atas.</li>
+                                        <li>Kembalikan perubahan ini dengan menekan tombol simpan.</li>
                                     </ol>
                                     <p style="margin-top: 8px;"><small><em>* Catatan: Setelah didaftarkan pertama kali, OpenWeatherMap memerlukan waktu aktivasi API Key sekitar 10 - 30 menit sebelum kuncinya dapat merespons request data dari peta.</em></small></p>
                                 </div>
@@ -92,7 +93,7 @@
                         <div class="row">
                             <div class="col-sm-9 col-sm-offset-3">
                                 <button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> Simpan Konfigurasi</button>
-                                <a href="{{ site_url('cctv_admin') }}" class="btn btn-default">Batal</a>
+                                <a href="{{ site_url('gis_camera') }}" class="btn btn-default">Batal</a>
                             </div>
                         </div>
                     </div>

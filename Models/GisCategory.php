@@ -4,28 +4,28 @@
  *
  * File ini bagian dari:
  *
- * Modul Peta CCTV untuk OpenSID
+ * Modul Peta GIS untuk OpenSID
  *
  * Modul ini dikembangkan untuk menambah fitur aplikasi OpenSID
  *
- * @package   Modul Peta CCTV untuk OpenSID
+ * @package   Modul Peta GIS untuk OpenSID
  * @author    Akmal Fadli
  * @license   http://www.gnu.org/licenses/gpl.html GPL V3
  *
  */
 
-namespace Modules\PetaCCTV\Models;
+namespace Modules\PetaGIS\Models;
 
 use App\Models\BaseModel;
 use App\Traits\ConfigId;
 
 defined('BASEPATH') || exit('No direct script access allowed');
 
-class CctvCategory extends BaseModel
+class GisCategory extends BaseModel
 {
     use ConfigId;
 
-    protected $table = 'cctv_categories';
+    protected $table = 'gis_categories';
 
     protected $fillable = [
         'name',
@@ -37,6 +37,6 @@ class CctvCategory extends BaseModel
      */
     public function cameras()
     {
-        return $this->hasMany(CctvCamera::class, 'category_id');
+        return $this->hasMany(GisCamera::class, 'category_id');
     }
 }

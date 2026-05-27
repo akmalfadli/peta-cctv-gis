@@ -4,31 +4,31 @@
  *
  * File ini bagian dari:
  *
- * Modul Peta CCTV untuk OpenSID
+ * Modul Peta GIS untuk OpenSID
  *
  * Modul ini dikembangkan untuk menambah fitur aplikasi OpenSID
  *
- * @package   Modul Peta CCTV untuk OpenSID
+ * @package   Modul Peta GIS untuk OpenSID
  * @author    Akmal Fadli
  * @license   http://www.gnu.org/licenses/gpl.html GPL V3
  *
  */
 
-namespace Modules\PetaCCTV\Providers;
+namespace Modules\PetaGIS\Providers;
 
 use Illuminate\Support\ServiceProvider;
 
-class PetaCCTVServiceProvider extends ServiceProvider
+class PetaGISServiceProvider extends ServiceProvider
 {
     /**
      * @var string
      */
-    protected $moduleName = 'PetaCCTV';
+    protected $moduleName = 'PetaGIS';
 
     /**
      * @var string
      */
-    protected $moduleNameLower = 'cctv';
+    protected $moduleNameLower = 'gis';
 
     /**
      * Boot the application events.
@@ -47,7 +47,7 @@ class PetaCCTVServiceProvider extends ServiceProvider
     protected function publishAssets(): void
     {
         $moduleAssetSource = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Assets';
-        $publicAssetDest = FCPATH . 'assets' . DIRECTORY_SEPARATOR . 'modules' . DIRECTORY_SEPARATOR . 'cctv';
+        $publicAssetDest = FCPATH . 'assets' . DIRECTORY_SEPARATOR . 'modules' . DIRECTORY_SEPARATOR . 'gis';
 
         if (file_exists($moduleAssetSource)) {
             $this->copyDirectory($moduleAssetSource, $publicAssetDest);

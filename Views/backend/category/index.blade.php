@@ -6,7 +6,7 @@
 
 @section('breadcrumb')
     <li><a href="{{ site_url('hom_sid') }}"><i class="fa fa-dashboard"></i> Home</a></li>
-    <li><a href="{{ site_url('cctv_admin') }}">Daftar Kamera CCTV</a></li>
+    <li><a href="{{ site_url('gis_camera') }}">Daftar Kamera CCTV</a></li>
     <li class="active">{{ $title }}</li>
 @endsection
 
@@ -53,7 +53,7 @@
                                             @if ($cat->cameras_count == 0)
                                                 <button type="button" 
                                                         class="btn btn-danger btn-xs btn-delete-category" 
-                                                        data-href="{{ ci_route('cctv_category.delete', $cat->id) }}" 
+                                                        data-href="{{ ci_route('gis_category.delete', $cat->id) }}" 
                                                         title="Hapus Kategori">
                                                     <i class="fa fa-trash"></i>
                                                 </button>
@@ -69,7 +69,7 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="5" class="text-center text-muted" style="padding: 20px;">Belum ada data kategori CCTV yang tersedia.</td>
+                                        <td colspan="5" class="text-center text-muted" style="padding: 20px;">Belum ada data kategori GIS yang tersedia.</td>
                                     </tr>
                                 @endforelse
                             </tbody>
@@ -86,9 +86,9 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title"><i class="fa fa-tag"></i> Tambah Kategori CCTV Baru</h4>
+                    <h4 class="modal-title"><i class="fa fa-tag"></i> Tambah Kategori GIS Baru</h4>
                 </div>
-                {!! form_open(ci_route('cctv_category.store'), ['class' => 'form-horizontal']) !!}
+                {!! form_open(ci_route('gis_category.store'), ['class' => 'form-horizontal']) !!}
                 <div class="modal-body">
                     <div class="form-group">
                         <label class="col-sm-3 control-label">Nama Kategori <span class="text-danger">*</span></label>
@@ -112,7 +112,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title"><i class="fa fa-pencil"></i> Edit Nama Kategori CCTV</h4>
+                    <h4 class="modal-title"><i class="fa fa-pencil"></i> Edit Nama Kategori GIS</h4>
                 </div>
                 <form id="editCategoryForm" method="POST" class="form-horizontal">
                     <div class="modal-body">
@@ -141,7 +141,7 @@
                     <h4 class="modal-title"><i class="fa fa-exclamation-triangle"></i> Konfirmasi</h4>
                 </div>
                 <div class="modal-body">
-                    Apakah Anda yakin ingin menghapus data kategori CCTV ini?
+                    Apakah Anda yakin ingin menghapus data kategori GIS ini?
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Batal</button>
@@ -161,7 +161,7 @@
                 var name = $(this).data('name');
                 
                 $('#edit_category_name').val(name);
-                $('#editCategoryForm').attr('action', "{{ site_url('cctv_category/update') }}/" + id);
+                $('#editCategoryForm').attr('action', "{{ site_url('gis_category/update') }}/" + id);
                 $('#editCategoryModal').modal('show');
             });
 

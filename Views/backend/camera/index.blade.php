@@ -71,10 +71,10 @@
                     <div class="box-header with-border">
                         <div class="row">
                             <div class="col-sm-8">
-                                <a href="{{ ci_route('cctv_admin.create') }}" class="btn btn-success btn-sm"><i class="fa fa-plus"></i> Tambah Kamera Baru</a>
-                                <a href="{{ ci_route('cctv_admin.health_check') }}" class="btn btn-info btn-sm" title="Jalankan pengecekan status online/offline untuk semua kamera"><i class="fa fa-refresh"></i> Jalankan Cek Kesehatan</a>
-                                <a href="{{ ci_route('cctv_admin.settings') }}" class="btn btn-warning btn-sm" title="Pengaturan Cuaca OpenWeatherMap"><i class="fa fa-cloud"></i> Pengaturan Cuaca</a>
-                                <a href="{{ ci_route('cctv.index') }}" target="_blank" class="btn btn-default btn-sm"><i class="fa fa-map"></i> Lihat Peta Publik</a>
+                                <a href="{{ ci_route('gis_camera.create') }}" class="btn btn-success btn-sm"><i class="fa fa-plus"></i> Tambah Kamera Baru</a>
+                                <a href="{{ ci_route('gis_camera.health_check') }}" class="btn btn-info btn-sm" title="Jalankan pengecekan status online/offline untuk semua kamera"><i class="fa fa-refresh"></i> Jalankan Cek Kesehatan</a>
+                                <a href="{{ ci_route('gis_camera.settings') }}" class="btn btn-warning btn-sm" title="Pengaturan Cuaca OpenWeatherMap"><i class="fa fa-cloud"></i> Pengaturan Cuaca</a>
+                                <a href="{{ ci_route('petagis.index') }}" target="_blank" class="btn btn-default btn-sm"><i class="fa fa-map"></i> Lihat Peta Publik</a>
                             </div>
                         </div>
                     </div>
@@ -219,7 +219,7 @@
                 processing: true,
                 serverSide: true,
                 ajax: {
-                    url: "{{ ci_route('cctv_admin.datatables') }}",
+                    url: "{{ ci_route('gis_camera.datatables') }}",
                     type: "POST",
                     data: function(d) {
                         d.category_id = $('#filter_category').val();
@@ -274,7 +274,7 @@
             $('#cctv_table').on('change', '.toggle-public', function() {
                 var id = $(this).data('id');
                 $.ajax({
-                    url: "{{ site_url('cctv_admin/toggle_public') }}/" + id,
+                    url: "{{ site_url('gis_camera/toggle_public') }}/" + id,
                     type: "POST",
                     dataType: "JSON",
                     error: function() {
@@ -287,7 +287,7 @@
             $('#cctv_table').on('change', '.toggle-active', function() {
                 var id = $(this).data('id');
                 $.ajax({
-                    url: "{{ site_url('cctv_admin/toggle_active') }}/" + id,
+                    url: "{{ site_url('gis_camera/toggle_active') }}/" + id,
                     type: "POST",
                     dataType: "JSON",
                     error: function() {

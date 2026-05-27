@@ -1,14 +1,13 @@
 <?php
 
 /*
- *
  * File ini bagian dari:
  *
- * Modul Peta CCTV untuk OpenSID
+ * Modul Peta GIS untuk OpenSID
  *
  * Modul ini dikembangkan untuk menambah fitur aplikasi OpenSID
  *
- * @package   Modul Peta CCTV untuk OpenSID
+ * @package   Modul Peta GIS untuk OpenSID
  * @author    Akmal Fadli
  * @license   http://www.gnu.org/licenses/gpl.html GPL V3
  *
@@ -17,16 +16,16 @@
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use App\Models\SettingAplikasi;
-use Modules\PetaCCTV\Models\CctvCamera;
-use Modules\PetaCCTV\Models\CctvCategory;
+use Modules\PetaGIS\Models\GisCamera;
+use Modules\PetaGIS\Models\GisCategory;
 
 defined('BASEPATH') || exit('No direct script access allowed');
 
-class CctvAdminController extends AdminModulController
+class GisCameraAdminController extends AdminModulController
 {
-    public $moduleName = 'PetaCCTV';
-    public $modul_ini = 'cctv';
-    public $sub_modul_ini = 'cctv-admin';
+    public $moduleName = 'PetaGIS';
+    public $modul_ini = 'gis';
+    public $sub_modul_ini = 'gis-camera';
 
     public function __construct()
     {
@@ -40,17 +39,17 @@ class CctvAdminController extends AdminModulController
      */
     public function index()
     {
-        $categories = CctvCategory::orderBy('name', 'asc')->get();
+        $categories = GisCategory::orderBy('name', 'asc')->get();
 
         // Get basic count statistics
         $stats = [
-            'total' => CctvCamera::count(),
-            'online' => CctvCamera::where('status', 'online')->active()->count(),
-            'offline' => CctvCamera::where('status', 'offline')->active()->count(),
-            'inactive' => CctvCamera::where('is_active', 0)->count(),
+            'total' => GisCamera::count(),
+            'online' => GisCamera::where('status', 'online')->active()->count(),
+            'offline' => GisCamera::where('status', 'offline')->active()->count(),
+            'inactive' => GisCamera::where('is_active', 0)->count(),
         ];
 
-        return view('cctv::backend.camera.index', [
+        return view('gis::backend.camera.index', [
             'categories' => $categories,
             'stats' => $stats,
             'title' => 'Daftar Kamera CCTV',
@@ -70,13 +69,13 @@ class CctvAdminController extends AdminModulController
             'is_public' => ci()->input->get_post('is_public'),
         ];
 
-        $query = CctvCamera::with('category')->filter($filters);
+        $query = GisCamera::with('category')->filter($filters);
 
         return datatables()->of($query)
             ->addIndexColumn()
             ->addColumn('thumbnail_view', function ($row) {
                 if ($row->thumbnail) {
-                    return '<img src="' . base_url('shared/cctv/' . $row->thumbnail) . '" alt="Thumbnail" class="img-thumbnail" style="max-height: 50px; max-width: 80px;">';
+                    return '<img src="' . base_url('shared/gis/' . $row->thumbnail) . '" alt="Thumbnail" class="img-thumbnail" style="max-height: 50px; max-width: 80px;">';
                 }
                 return '<span class="label label-default">No Image</span>';
             })
@@ -123,8 +122,8 @@ class CctvAdminController extends AdminModulController
                 return '<span class="label label-danger"><i class="fa fa-circle"></i> Offline</span>';
             })
             ->addColumn('aksi', function ($row) {
-                $html = '<a href="' . ci_route('cctv_admin.edit', $row->id) . '" class="btn btn-primary btn-xs" title="Edit Kamera"><i class="fa fa-pencil"></i></a> ';
-                $html .= '<a href="' . ci_route('cctv_admin.delete', $row->id) . '" class="btn btn-danger btn-xs btn-delete-cctv" title="Hapus"><i class="fa fa-trash"></i></a>';
+                $html = '<a href="' . ci_route('gis_camera.edit', $row->id) . '" class="btn btn-primary btn-xs" title="Edit Kamera"><i class="fa fa-pencil"></i></a> ';
+                $html .= '<a href="' . ci_route('gis_camera.delete', $row->id) . '" class="btn btn-danger btn-xs btn-delete-cctv" title="Hapus"><i class="fa fa-trash"></i></a>';
                 return $html;
             })
             ->rawColumns(['thumbnail_view', 'visibility', 'active_status', 'health_status', 'aksi'])
@@ -138,10 +137,10 @@ class CctvAdminController extends AdminModulController
     {
         isCan('u', $this->modul_ini);
 
-        $categories = CctvCategory::orderBy('name', 'asc')->get();
+        $categories = GisCategory::orderBy('name', 'asc')->get();
         $desa = identitas();
 
-        return view('cctv::backend.camera.form', [
+        return view('gis::backend.camera.form', [
             'camera' => null,
             'categories' => $categories,
             'desa' => $desa,
@@ -169,11 +168,11 @@ class CctvAdminController extends AdminModulController
         // Validations
         if (empty($name)) {
             set_session('error', 'Nama kamera/tempat tidak boleh kosong.');
-            return redirect('cctv_admin/create');
+            return redirect('gis_camera/create');
         }
         if ($latitude === '' || $longitude === '') {
             set_session('error', 'Koordinat peta lokasi tidak boleh kosong.');
-            return redirect('cctv_admin/create');
+            return redirect('gis_camera/create');
         }
 
         DB::beginTransaction();
@@ -185,7 +184,7 @@ class CctvAdminController extends AdminModulController
                 $thumbnail = $this->handleUpload($_FILES['thumbnail']);
             }
 
-            CctvCamera::create([
+            GisCamera::create([
                 'config_id' => identitas('id'),
                 'name' => $name,
                 'description' => $description,
@@ -206,10 +205,10 @@ class CctvAdminController extends AdminModulController
         } catch (\Exception $e) {
             DB::rollBack();
             set_session('error', 'Gagal menambahkan kamera: ' . $e->getMessage());
-            return redirect('cctv_admin/create');
+            return redirect('gis_camera/create');
         }
 
-        return redirect('cctv_admin');
+        return redirect('gis_camera');
     }
 
     /**
@@ -219,11 +218,11 @@ class CctvAdminController extends AdminModulController
     {
         isCan('u', $this->modul_ini);
 
-        $camera = CctvCamera::findOrFail($id);
-        $categories = CctvCategory::orderBy('name', 'asc')->get();
+        $camera = GisCamera::findOrFail($id);
+        $categories = GisCategory::orderBy('name', 'asc')->get();
         $desa = identitas();
 
-        return view('cctv::backend.camera.form', [
+        return view('gis::backend.camera.form', [
             'camera' => $camera,
             'categories' => $categories,
             'desa' => $desa,
@@ -238,7 +237,7 @@ class CctvAdminController extends AdminModulController
     {
         isCan('u', $this->modul_ini);
 
-        $camera = CctvCamera::findOrFail($id);
+        $camera = GisCamera::findOrFail($id);
 
         $name = trim(ci()->input->post('name') ?: '');
         $description = trim(ci()->input->post('description') ?: '');
@@ -253,11 +252,11 @@ class CctvAdminController extends AdminModulController
         // Validations
         if (empty($name)) {
             set_session('error', 'Nama kamera/tempat tidak boleh kosong.');
-            return redirect('cctv_admin/edit/' . $id);
+            return redirect('gis_camera/edit/' . $id);
         }
         if ($latitude === '' || $longitude === '') {
             set_session('error', 'Koordinat peta lokasi tidak boleh kosong.');
-            return redirect('cctv_admin/edit/' . $id);
+            return redirect('gis_camera/edit/' . $id);
         }
 
         DB::beginTransaction();
@@ -266,8 +265,8 @@ class CctvAdminController extends AdminModulController
             $thumbnail = $camera->thumbnail;
             if (isset($_FILES['thumbnail']) && $_FILES['thumbnail']['error'] === UPLOAD_ERR_OK) {
                 // Delete old thumbnail if exists
-                if ($thumbnail && file_exists(FCPATH . 'shared/cctv/' . $thumbnail)) {
-                    @unlink(FCPATH . 'shared/cctv/' . $thumbnail);
+                if ($thumbnail && file_exists(FCPATH . 'shared/gis/' . $thumbnail)) {
+                    @unlink(FCPATH . 'shared/gis/' . $thumbnail);
                 }
                 $thumbnail = $this->handleUpload($_FILES['thumbnail']);
             }
@@ -289,11 +288,11 @@ class CctvAdminController extends AdminModulController
             set_session('success', 'Kamera CCTV "' . $name . '" berhasil diperbarui.');
         } catch (\Exception $e) {
             DB::rollBack();
-            set_session('error', 'Gagal memperbarui kamera: ' . $e->getMessage());
-            return redirect('cctv_admin/edit/' . $id);
+            set_session('error', 'Gagal diperbarui: ' . $e->getMessage());
+            return redirect('gis_camera/edit/' . $id);
         }
 
-        return redirect('cctv_admin');
+        return redirect('gis_camera');
     }
 
     /**
@@ -303,7 +302,7 @@ class CctvAdminController extends AdminModulController
     {
         isCan('h', $this->modul_ini);
 
-        $camera = CctvCamera::findOrFail($id);
+        $camera = GisCamera::findOrFail($id);
 
         DB::beginTransaction();
 
@@ -311,8 +310,8 @@ class CctvAdminController extends AdminModulController
             $name = $camera->name;
 
             // Delete thumbnail file
-            if ($camera->thumbnail && file_exists(FCPATH . 'shared/cctv/' . $camera->thumbnail)) {
-                @unlink(FCPATH . 'shared/cctv/' . $camera->thumbnail);
+            if ($camera->thumbnail && file_exists(FCPATH . 'shared/gis/' . $camera->thumbnail)) {
+                @unlink(FCPATH . 'shared/gis/' . $camera->thumbnail);
             }
 
             $camera->delete();
@@ -324,7 +323,7 @@ class CctvAdminController extends AdminModulController
             set_session('error', 'Gagal menghapus kamera: ' . $e->getMessage());
         }
 
-        return redirect('cctv_admin');
+        return redirect('gis_camera');
     }
 
     /**
@@ -334,7 +333,7 @@ class CctvAdminController extends AdminModulController
     {
         isCan('u', $this->modul_ini);
 
-        $camera = CctvCamera::findOrFail($id);
+        $camera = GisCamera::findOrFail($id);
         $camera->is_active = $camera->is_active ? 0 : 1;
         $camera->save();
 
@@ -348,7 +347,7 @@ class CctvAdminController extends AdminModulController
     {
         isCan('u', $this->modul_ini);
 
-        $camera = CctvCamera::findOrFail($id);
+        $camera = GisCamera::findOrFail($id);
         $camera->is_public = $camera->is_public ? 0 : 1;
         $camera->save();
 
@@ -361,8 +360,6 @@ class CctvAdminController extends AdminModulController
      */
     public function healthCheck()
     {
-        // Don't require strict admin session check if triggered from CLI/local,
-        // but verify key/token or require it if not from localhost.
         $isCli = is_cli();
         $isLocalhost = in_array($_SERVER['REMOTE_ADDR'] ?? '', ['127.0.0.1', '::1']);
 
@@ -370,7 +367,7 @@ class CctvAdminController extends AdminModulController
             isCan('b', $this->modul_ini);
         }
 
-        $cameras = CctvCamera::active()->get();
+        $cameras = GisCamera::active()->get();
         $checked = 0;
         $online = 0;
 
@@ -417,7 +414,7 @@ class CctvAdminController extends AdminModulController
         }
 
         set_session('success', $res['message']);
-        return redirect('cctv_admin');
+        return redirect('gis_camera');
     }
 
     /**
@@ -425,28 +422,24 @@ class CctvAdminController extends AdminModulController
      */
     private function pingUrl(string $url, string $type): string
     {
-        // 1) For YouTube embeds, ping YouTube Domain instead of individual streams
         if ($type === 'youtube' || str_contains($url, 'youtube.com') || str_contains($url, 'youtu.be')) {
             $url = 'https://www.youtube.com';
         }
 
-        // 2) If it's an iframe snippet, extract the src URL
         if ($type === 'iframe' && preg_match('/src="([^"]+)"/', $url, $match)) {
             $url = $match[1];
         }
 
-        // Clean URL scheme
         if (str_starts_with($url, '//')) {
             $url = 'https:' . $url;
         }
 
-        // 3) Light Connection cURL
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_NOBODY, true); // HEAD request only (fast)
+        curl_setopt($ch, CURLOPT_NOBODY, true);
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-        curl_setopt($ch, CURLOPT_TIMEOUT, 3);          // request timeout
-        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 2);   // connection timeout
+        curl_setopt($ch, CURLOPT_TIMEOUT, 3);
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 2);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
 
@@ -454,12 +447,10 @@ class CctvAdminController extends AdminModulController
         $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         curl_close($ch);
 
-        // Standard HTTP success statuses
         if ($httpCode >= 200 && $httpCode < 400) {
             return 'online';
         }
 
-        // Fallback: If HEAD fails (some NVR streams return 405 Method Not Allowed), retry with standard GET request
         if ($httpCode === 405) {
             $ch = curl_init($url);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -468,7 +459,7 @@ class CctvAdminController extends AdminModulController
             curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 2);
             curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
             curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
-            curl_setopt($ch, CURLOPT_RANGE, '0-100'); // only fetch first 100 bytes
+            curl_setopt($ch, CURLOPT_RANGE, '0-100');
 
             curl_exec($ch);
             $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
@@ -483,14 +474,13 @@ class CctvAdminController extends AdminModulController
     }
 
     /**
-     * Helpers: Ensure shared/cctv directory exists.
+     * Helpers: Ensure shared/gis directory exists.
      */
     private function ensureUploadDirectory(): void
     {
-        $path = FCPATH . 'shared/cctv/';
+        $path = FCPATH . 'shared/gis/';
         if (!file_exists($path)) {
             mkdir($path, 0755, true);
-            // Put index.html inside to prevent folder directory browsing
             file_put_contents($path . 'index.html', '<html><body bgcolor="#ffffff"></body></html>');
         }
     }
@@ -501,14 +491,14 @@ class CctvAdminController extends AdminModulController
     private function handleUpload(array $file): string
     {
         $ext = pathinfo($file['name'], PATHINFO_EXTENSION);
-        $fileName = 'cctv_' . uniqid() . '.' . strtolower($ext);
-        $target = FCPATH . 'shared/cctv/' . $fileName;
+        $fileName = 'gis_' . uniqid() . '.' . strtolower($ext);
+        $target = FCPATH . 'shared/gis/' . $fileName;
 
         if (move_uploaded_file($file['tmp_name'], $target)) {
             return $fileName;
         }
 
-        throw new \Exception('Gagal memindahkan file yang diunggah.');
+        throw new \Exception('Gagal memindahkan file.');
     }
 
     /**
@@ -527,17 +517,14 @@ class CctvAdminController extends AdminModulController
             DB::beginTransaction();
 
             try {
-                // Update OpenWeatherMap API Key
                 SettingAplikasi::where('key', 'openweathermap_api_key')
                     ->update(['value' => $apiKey]);
 
-                // Update Weather Status Widget
                 SettingAplikasi::where('key', 'openweathermap_status')
                     ->update(['value' => $status]);
 
                 DB::commit();
 
-                // Clear settings cache to ensure updates are reflected globally
                 cache()->forget('setting_aplikasi');
                 if (class_exists('App\Models\SettingAplikasi')) {
                     (new SettingAplikasi())->flushQueryCache();
@@ -546,15 +533,14 @@ class CctvAdminController extends AdminModulController
                 set_session('success', 'Pengaturan integrasi cuaca berhasil disimpan.');
             } catch (\Exception $e) {
                 DB::rollBack();
-                set_session('error', 'Gagal menyimpan pengaturan: ' . $e->getMessage());
+                set_session('error', 'Gagal menyimpan: ' . $e->getMessage());
             }
 
-            return redirect('cctv_admin/settings');
+            return redirect('gis_camera/settings');
         }
 
         $desa = identitas();
 
-        // Self-heal/Bootstrap weather configurations if missing
         $apiKey = SettingAplikasi::where('key', 'openweathermap_api_key')->first();
         if (!$apiKey) {
             SettingAplikasi::create([
@@ -564,7 +550,7 @@ class CctvAdminController extends AdminModulController
                 'judul' => 'OpenWeatherMap API Key',
                 'keterangan' => 'API Key dari OpenWeatherMap untuk menampilkan informasi cuaca desa.',
                 'jenis' => 'text',
-                'kategori' => 'PetaCCTV',
+                'kategori' => 'PetaGIS',
             ]);
         }
 
@@ -577,11 +563,11 @@ class CctvAdminController extends AdminModulController
                 'judul' => 'Status Weather Widget',
                 'keterangan' => 'Aktifkan/Nonaktifkan widget informasi cuaca di peta GIS.',
                 'jenis' => 'boolean',
-                'kategori' => 'PetaCCTV',
+                'kategori' => 'PetaGIS',
             ]);
         }
 
-        return view('cctv::backend.settings.index', [
+        return view('gis::backend.settings.index', [
             'weather_api_key' => setting('openweathermap_api_key') ?: '',
             'weather_enabled' => setting('openweathermap_status') === '1',
             'desa' => $desa,

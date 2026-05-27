@@ -1,14 +1,13 @@
 {
-    "name": "opensid-modules/peta-cctv",
-    "description": "Modul Peta CCTV untuk OpenSID",
+    "name": "opensid-modules/peta-gis",
+    "description": "Modul Peta GIS & Pembangunan untuk OpenSID",
     "license": "GPL-3.0-or-later",
     "type": "library",
     "keywords": [
-        "cctv",
-        "peta",
         "gis",
-        "streaming",
-        "monitoring",
+        "peta",
+        "cctv",
+        "pembangunan",
         "modules",
         "opensid"
     ],

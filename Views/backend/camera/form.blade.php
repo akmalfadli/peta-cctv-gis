@@ -6,7 +6,7 @@
 
 @section('breadcrumb')
     <li><a href="{{ site_url('hom_sid') }}"><i class="fa fa-dashboard"></i> Home</a></li>
-    <li><a href="{{ site_url('cctv_admin') }}">Daftar Kamera CCTV</a></li>
+    <li><a href="{{ site_url('gis_camera') }}">Daftar Kamera CCTV</a></li>
     <li class="active">{{ $camera ? 'Edit Kamera' : 'Tambah Kamera Baru' }}</li>
 @endsection
 
@@ -28,7 +28,7 @@
                     </div>
 
                     @php
-                        $actionUrl = $camera ? ci_route('cctv_admin.update', $camera->id) : ci_route('cctv_admin.store');
+                        $actionUrl = $camera ? ci_route('gis_camera.update', $camera->id) : ci_route('gis_camera.store');
                     @endphp
 
                     {!! form_open_multipart($actionUrl, ['id' => 'cctvForm', 'class' => 'form-horizontal']) !!}
@@ -93,7 +93,7 @@
                                         <input type="file" name="thumbnail" class="form-control" accept="image/*">
                                         @if ($camera && $camera->thumbnail)
                                             <p class="help-block">
-                                                <img src="{{ base_url('shared/cctv/' . $camera->thumbnail) }}" alt="Thumbnail Saat Ini" style="max-height: 80px; max-width: 150px; margin-top: 5px;" class="img-thumbnail"><br>
+                                                <img src="{{ base_url('shared/gis/' . $camera->thumbnail) }}" alt="Thumbnail Saat Ini" style="max-height: 80px; max-width: 150px; margin-top: 5px;" class="img-thumbnail"><br>
                                                 <small class="text-info">* Unggah file baru jika ingin mengganti cover thumbnail saat ini.</small>
                                             </p>
                                         @else
@@ -141,7 +141,7 @@
                     </div>
 
                     <div class="box-footer">
-                        <a href="{{ site_url('cctv_admin') }}" class="btn btn-default"><i class="fa fa-undo"></i> Batal</a>
+                        <a href="{{ site_url('gis_camera') }}" class="btn btn-default"><i class="fa fa-undo"></i> Batal</a>
                         <button type="submit" class="btn btn-primary pull-right"><i class="fa fa-save"></i> Simpan Data Kamera</button>
                     </div>
                     {!! form_close() !!}
