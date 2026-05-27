@@ -137,7 +137,7 @@
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title"><i class="fa fa-pencil"></i> Edit Kategori GIS</h4>
                 </div>
-                <form id="editCategoryForm" method="POST" class="form-horizontal">
+                {!! form_open('', ['id' => 'editCategoryForm', 'class' => 'form-horizontal']) !!}
                     <div class="modal-body">
                         <div class="form-group">
                             <label class="col-sm-3 control-label">Nama Kategori <span class="text-danger">*</span></label>
@@ -163,7 +163,7 @@
                         <button type="button" class="btn btn-default" data-dismiss="modal">Batal</button>
                         <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
                     </div>
-                </form>
+                {!! form_close() !!}
             </div>
         </div>
     </div>
