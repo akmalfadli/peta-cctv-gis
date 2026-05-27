@@ -411,8 +411,10 @@
 
         // Sync stats
         function updateStats() {
-            var total = camerasData.length;
-            var online = camerasData.filter(c => c.status === 'online').length;
+            // Only count cameras that have a stream type (actual active cameras)
+            var streamCameras = camerasData.filter(c => c.stream_type && c.stream_type.trim() !== '');
+            var total = streamCameras.length;
+            var online = streamCameras.filter(c => c.status === 'online').length;
             var offline = total - online;
             var pembangunansCount = pembangunansData.length;
 
