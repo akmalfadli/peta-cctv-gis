@@ -5,7 +5,7 @@
         <!-- Header -->
         <div id="weather_header" class="flex items-center justify-between">
             <div class="flex items-center space-x-1.5 text-ops-primary">
-                <i class="fa-solid fa-cloud-sun text-xs text-ops-primary/80 animate-pulse"></i>
+                <i class="fa-solid fa-cloud-sun text-base text-ops-primary/80 animate-pulse"></i>
                 <span class="text-[9px] font-extrabold tracking-wider">Cuaca Desa</span>
             </div>
             <button id="btn_hide_weather" class="text-slate-400 hover:text-slate-600 transition" title="Maksimalkan">

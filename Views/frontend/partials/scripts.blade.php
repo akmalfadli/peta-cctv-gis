@@ -96,12 +96,12 @@
                             var fcItem = document.createElement('div');
                             fcItem.className = 'flex items-center justify-between bg-slate-50/50 border border-slate-100 rounded py-0.5 px-2.5';
                             fcItem.innerHTML = `
-                                                                <span class="text-[9px] text-slate-500 font-extrabold">${timeStr}</span>
-                                                                <div class="flex items-center space-x-1.5">
-                                                                    <img src="https://openweathermap.org/img/wn/${fcIcon}.png" alt="Cuaca" class="w-8 h-8 my-0.5 select-none pointer-events-none shrink-0">
-                                                                    <span class="text-xs text-slate-800 font-extrabold leading-none">${fcTemp}°</span>
-                                                                </div>
-                                                            `;
+                                                                                        <span class="text-[9px] text-slate-500 font-extrabold">${timeStr}</span>
+                                                                                        <div class="flex items-center space-x-1.5">
+                                                                                            <img src="https://openweathermap.org/img/wn/${fcIcon}.png" alt="Cuaca" class="w-8 h-8 my-0.5 select-none pointer-events-none shrink-0">
+                                                                                            <span class="text-xs text-slate-800 font-extrabold leading-none">${fcTemp}°</span>
+                                                                                        </div>
+                                                                                    `;
                             forecastEl.appendChild(fcItem);
                         }
 
@@ -1206,8 +1206,8 @@
                 var mapRect = document.getElementById('map').getBoundingClientRect();
 
                 // Horizontal center of the button, and top of the button minus 15px margin
-                var x = buttonRect.left - mapRect.left + (buttonRect.width / 2);
-                var y = buttonRect.top - mapRect.top - 15;
+                var x = buttonRect.left - mapRect.left + (buttonRect.width / 2) + 20;
+                var y = buttonRect.top - mapRect.top - 45;
 
                 // Convert container relative pixel coordinates to Leaflet map LatLng
                 var targetLatLng = map.containerPointToLatLng([x, y]);
