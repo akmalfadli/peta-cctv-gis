@@ -30,6 +30,9 @@ Route::group('cctv_admin', ['namespace' => 'PetaCCTV/BackEnd'], static function 
 
     // Health Monitor Trigger
     Route::get('/health_check', 'CctvAdminController@healthCheck')->name('cctv_admin.health_check');
+
+    // Settings configuration
+    Route::match(['get', 'post'], '/settings', 'CctvAdminController@settings')->name('cctv_admin.settings');
 });
 
 // BACKEND - ADMIN CCTV CATEGORIES

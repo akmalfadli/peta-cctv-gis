@@ -16,6 +16,7 @@
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use App\Models\SettingAplikasi;
 use Modules\PetaCCTV\Models\CctvCamera;
 use Modules\PetaCCTV\Models\CctvCategory;
 
@@ -508,5 +509,83 @@ class CctvAdminController extends AdminModulController
         }
 
         throw new \Exception('Gagal memindahkan file yang diunggah.');
+    }
+
+    /**
+     * Halaman Pengaturan Cuaca OpenWeatherMap.
+     */
+    public function settings()
+    {
+        isCan('b', $this->modul_ini);
+
+        if (ci()->input->method() === 'post') {
+            isCan('u', $this->modul_ini);
+
+            $apiKey = trim(ci()->input->post('weather_api_key') ?: '');
+            $status = ci()->input->post('weather_enabled') ? '1' : '0';
+
+            DB::beginTransaction();
+
+            try {
+                // Update OpenWeatherMap API Key
+                SettingAplikasi::where('key', 'openweathermap_api_key')
+                    ->update(['value' => $apiKey]);
+
+                // Update Weather Status Widget
+                SettingAplikasi::where('key', 'openweathermap_status')
+                    ->update(['value' => $status]);
+
+                DB::commit();
+
+                // Clear settings cache to ensure updates are reflected globally
+                cache()->forget('setting_aplikasi');
+                if (class_exists('App\Models\SettingAplikasi')) {
+                    (new SettingAplikasi())->flushQueryCache();
+                }
+
+                set_session('success', 'Pengaturan integrasi cuaca berhasil disimpan.');
+            } catch (\Exception $e) {
+                DB::rollBack();
+                set_session('error', 'Gagal menyimpan pengaturan: ' . $e->getMessage());
+            }
+
+            return redirect('cctv_admin/settings');
+        }
+
+        $desa = identitas();
+
+        // Self-heal/Bootstrap weather configurations if missing
+        $apiKey = SettingAplikasi::where('key', 'openweathermap_api_key')->first();
+        if (!$apiKey) {
+            SettingAplikasi::create([
+                'config_id' => identitas('id'),
+                'key' => 'openweathermap_api_key',
+                'value' => '',
+                'judul' => 'OpenWeatherMap API Key',
+                'keterangan' => 'API Key dari OpenWeatherMap untuk menampilkan informasi cuaca desa.',
+                'jenis' => 'text',
+                'kategori' => 'PetaCCTV',
+            ]);
+        }
+
+        $statusSetting = SettingAplikasi::where('key', 'openweathermap_status')->first();
+        if (!$statusSetting) {
+            SettingAplikasi::create([
+                'config_id' => identitas('id'),
+                'key' => 'openweathermap_status',
+                'value' => '0',
+                'judul' => 'Status Weather Widget',
+                'keterangan' => 'Aktifkan/Nonaktifkan widget informasi cuaca di peta GIS.',
+                'jenis' => 'boolean',
+                'kategori' => 'PetaCCTV',
+            ]);
+        }
+
+        return view('cctv::backend.settings.index', [
+            'weather_api_key' => setting('openweathermap_api_key') ?: '',
+            'weather_enabled' => setting('openweathermap_status') === '1',
+            'desa' => $desa,
+            'title' => 'Pengaturan Integrasi Cuaca',
+        ]);
     }
 }

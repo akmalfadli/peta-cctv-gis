@@ -16,6 +16,7 @@
 
 use Modules\PetaCCTV\Models\CctvCamera;
 use Modules\PetaCCTV\Models\CctvCategory;
+use App\Models\SettingAplikasi;
 
 defined('BASEPATH') || exit('No direct script access allowed');
 
@@ -39,10 +40,39 @@ class CctvPublicController extends WebModulController
         $categories = CctvCategory::orderBy('name', 'asc')->get();
         $desa = identitas();
 
+        // Self-heal/Bootstrap weather configurations if missing
+        $apiKey = SettingAplikasi::where('key', 'openweathermap_api_key')->first();
+        if (!$apiKey) {
+            SettingAplikasi::create([
+                'config_id' => identitas('id'),
+                'key' => 'openweathermap_api_key',
+                'value' => '',
+                'judul' => 'OpenWeatherMap API Key',
+                'keterangan' => 'API Key dari OpenWeatherMap untuk menampilkan informasi cuaca desa.',
+                'jenis' => 'text',
+                'kategori' => 'PetaCCTV',
+            ]);
+        }
+
+        $statusSetting = SettingAplikasi::where('key', 'openweathermap_status')->first();
+        if (!$statusSetting) {
+            SettingAplikasi::create([
+                'config_id' => identitas('id'),
+                'key' => 'openweathermap_status',
+                'value' => '0',
+                'judul' => 'Status Weather Widget',
+                'keterangan' => 'Aktifkan/Nonaktifkan widget informasi cuaca di peta GIS.',
+                'jenis' => 'boolean',
+                'kategori' => 'PetaCCTV',
+            ]);
+        }
+
         return view('cctv::frontend.map', [
             'categories' => $categories,
             'desa' => $desa,
             'title' => 'Peta Pemantauan CCTV ' . (identitas('nama_desa') ? ucwords(setting('sebutan_desa')) . ' ' . ucwords(identitas('nama_desa')) : 'Desa'),
+            'weather_api_key' => setting('openweathermap_api_key') ?: '',
+            'weather_enabled' => setting('openweathermap_status') === '1',
         ]);
     }
 

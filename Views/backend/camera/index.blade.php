@@ -73,6 +73,7 @@
                             <div class="col-sm-8">
                                 <a href="{{ ci_route('cctv_admin.create') }}" class="btn btn-success btn-sm"><i class="fa fa-plus"></i> Tambah Kamera Baru</a>
                                 <a href="{{ ci_route('cctv_admin.health_check') }}" class="btn btn-info btn-sm" title="Jalankan pengecekan status online/offline untuk semua kamera"><i class="fa fa-refresh"></i> Jalankan Cek Kesehatan</a>
+                                <a href="{{ ci_route('cctv_admin.settings') }}" class="btn btn-warning btn-sm" title="Pengaturan Cuaca OpenWeatherMap"><i class="fa fa-cloud"></i> Pengaturan Cuaca</a>
                                 <a href="{{ ci_route('cctv.index') }}" target="_blank" class="btn btn-default btn-sm"><i class="fa fa-map"></i> Lihat Peta Publik</a>
                             </div>
                         </div>
