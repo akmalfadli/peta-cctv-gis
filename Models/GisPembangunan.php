@@ -73,6 +73,10 @@ class GisPembangunan extends BaseModel
             $query->where('kategori', $filters['kategori']);
         }
 
+        if (!empty($filters['tahun_anggaran'])) {
+            $query->where('tahun_anggaran', $filters['tahun_anggaran']);
+        }
+
         return $query;
     }
 }

@@ -23,14 +23,6 @@
             @endforeach
         </select>
 
-        <!-- Status select -->
-        <select id="status_select"
-            class="bg-white border border-ops-border rounded-md px-2 h-8 text-xs text-slate-900 focus:outline-none">
-            <option value="">STATUS</option>
-            <option value="online">● ONLINE</option>
-            <option value="offline">● OFFLINE</option>
-        </select>
-
         <!-- Pembangunan Kategori select -->
         <select id="pembangunan_kategori_select"
             class="bg-white border border-ops-border rounded-md px-2 h-8 text-xs text-slate-900 focus:outline-none hidden">
@@ -40,6 +32,12 @@
             <option value="kesehatan">KESEHATAN</option>
             <option value="ekonomi">EKONOMI DESA</option>
             <option value="lingkungan">LINGKUNGAN & BENCANA</option>
+        </select>
+
+        <!-- Pembangunan Tahun select -->
+        <select id="pembangunan_tahun_select"
+            class="bg-white border border-ops-border rounded-md px-2 h-8 text-xs text-slate-900 focus:outline-none hidden">
+            <option value="">TAHUN PEMBANGUNAN</option>
         </select>
 
         <!-- Reset filter button -->

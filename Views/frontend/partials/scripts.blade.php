@@ -9,6 +9,7 @@
         var camerasData = [];
         var pembangunansData = [];
         var hlsPlayer = null;
+        var isYearSelectPopulated = false;
 
         var activeCctvVisible = true;
         var activePembangunanVisible = true;
@@ -293,21 +294,21 @@
         // Helper to sync toolbar filters depending on active layers
         function syncFilterVisibility() {
             var cctvCat = document.getElementById('category_select');
-            var cctvStatus = document.getElementById('status_select');
             var pemCat = document.getElementById('pembangunan_kategori_select');
+            var pemTahun = document.getElementById('pembangunan_tahun_select');
 
             if (activeCctvVisible) {
                 if (cctvCat) cctvCat.classList.remove('hidden');
-                if (cctvStatus) cctvStatus.classList.remove('hidden');
             } else {
                 if (cctvCat) cctvCat.classList.add('hidden');
-                if (cctvStatus) cctvStatus.classList.add('hidden');
             }
 
             if (activePembangunanVisible) {
                 if (pemCat) pemCat.classList.remove('hidden');
+                if (pemTahun) pemTahun.classList.remove('hidden');
             } else {
                 if (pemCat) pemCat.classList.add('hidden');
+                if (pemTahun) pemTahun.classList.add('hidden');
             }
         }
 
@@ -371,12 +372,10 @@
         // Fetch CCTV cameras
         function fetchCameras() {
             var categoryId = document.getElementById('category_select').value;
-            var status = document.getElementById('status_select').value;
             var search = document.getElementById('search_input').value;
 
             var url = "{{ ci_route('petagis.api_cameras') }}?search=" + encodeURIComponent(search) +
-                "&category_id=" + categoryId +
-                "&status=" + status;
+                "&category_id=" + categoryId;
 
             fetch(url)
                 .then(response => response.json())
@@ -390,17 +389,52 @@
                 });
         }
 
+        // Helper to dynamically populate Pembangunan Year Select list
+        function populateYearSelect(data) {
+            if (isYearSelectPopulated) return;
+            var yearSelect = document.getElementById('pembangunan_tahun_select');
+            if (!yearSelect) return;
+
+            var years = [];
+            data.forEach(function(item) {
+                if (item.tahun_anggaran) {
+                    var y = parseInt(item.tahun_anggaran);
+                    if (y && !years.includes(y)) {
+                        years.push(y);
+                    }
+                }
+            });
+
+            // Sort descending (newest first)
+            years.sort(function(a, b) { return b - a; });
+
+            yearSelect.innerHTML = '<option value="">TAHUN PEMBANGUNAN</option>';
+            years.forEach(function(y) {
+                var opt = document.createElement('option');
+                opt.value = y;
+                opt.textContent = y;
+                yearSelect.appendChild(opt);
+            });
+
+            isYearSelectPopulated = true;
+        }
+
         // Fetch Pembangunans
         function fetchPembangunans() {
             var search = document.getElementById('search_input').value;
             var kategori = document.getElementById('pembangunan_kategori_select').value;
+            var tahun = document.getElementById('pembangunan_tahun_select').value;
             var url = "{{ ci_route('petagis.api_pembangunans') }}?search=" + encodeURIComponent(search) +
-                "&kategori=" + encodeURIComponent(kategori);
+                "&kategori=" + encodeURIComponent(kategori) +
+                "&tahun_anggaran=" + encodeURIComponent(tahun);
 
             fetch(url)
                 .then(response => response.json())
                 .then(data => {
                     pembangunansData = data;
+                    if (!isYearSelectPopulated && !tahun) {
+                        populateYearSelect(data);
+                    }
                     renderPembangunans();
                     updateStats();
                 })
@@ -1120,15 +1154,15 @@
 
         // Filter Event handlers
         document.getElementById('category_select').addEventListener('change', fetchData);
-        document.getElementById('status_select').addEventListener('change', fetchData);
         document.getElementById('pembangunan_kategori_select').addEventListener('change', fetchPembangunans);
+        document.getElementById('pembangunan_tahun_select').addEventListener('change', fetchPembangunans);
 
         // Reset filters
         document.getElementById('btn_reset_filter').addEventListener('click', function () {
             document.getElementById('search_input').value = '';
             document.getElementById('category_select').value = '';
-            document.getElementById('status_select').value = '';
             document.getElementById('pembangunan_kategori_select').value = '';
+            document.getElementById('pembangunan_tahun_select').value = '';
             fetchData();
             closeDetailsPanel();
         });

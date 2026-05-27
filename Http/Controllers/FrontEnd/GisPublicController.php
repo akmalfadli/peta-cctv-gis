@@ -155,6 +155,8 @@ class GisPublicController extends WebModulController
         $filters = [
             'search' => ci()->input->get('search'),
             'type' => ci()->input->get('type'),
+            'kategori' => ci()->input->get('kategori'),
+            'tahun_anggaran' => ci()->input->get('tahun_anggaran'),
         ];
 
         $pembangunans = GisPembangunan::filter($filters)
