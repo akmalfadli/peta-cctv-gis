@@ -590,9 +590,9 @@
                                     </div>
                                     
                                     ${project.photo ? `
-                                        <div class="w-full aspect-[4/3] bg-cover bg-center border border-slate-200 rounded mb-2.5 shadow-sm" style="background-image: url('${project.photo}')"></div>
+                                        <div class="w-full bg-cover bg-center border border-slate-200 rounded mb-2.5 shadow-sm" style="background-image: url('${project.photo}'); height: 120px;"></div>
                                     ` : `
-                                        <div class="w-full aspect-[4/3] bg-slate-100 border border-slate-200 rounded flex flex-col items-center justify-center text-slate-400 mb-2.5">
+                                        <div class="w-full bg-slate-100 border border-slate-200 rounded flex flex-col items-center justify-center text-slate-400 mb-2.5" style="height: 120px;">
                                             <i class="fa-regular fa-image text-xl"></i>
                                             <span class="text-[9px] mt-0.5 font-bold tracking-wide">TIDAK ADA FOTO</span>
                                         </div>
@@ -768,9 +768,9 @@
                              </div>
                              
                              ${project.photo ? `
-                                 <div class="w-full aspect-[4/3] bg-cover bg-center border border-slate-200 rounded mb-2.5 shadow-sm" style="background-image: url('${project.photo}')"></div>
+                                 <div class="w-full bg-cover bg-center border border-slate-200 rounded mb-2.5 shadow-sm" style="background-image: url('${project.photo}'); height: 120px;"></div>
                              ` : `
-                                 <div class="w-full aspect-[4/3] bg-slate-100 border border-slate-200 rounded flex flex-col items-center justify-center text-slate-400 mb-2.5">
+                                 <div class="w-full bg-slate-100 border border-slate-200 rounded flex flex-col items-center justify-center text-slate-400 mb-2.5" style="height: 120px;">
                                      <i class="fa-regular fa-image text-xl"></i>
                                      <span class="text-[9px] mt-0.5 font-bold tracking-wide">TIDAK ADA FOTO</span>
                                  </div>
