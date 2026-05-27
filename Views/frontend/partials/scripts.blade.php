@@ -212,7 +212,7 @@
             zoomControl: false,
             attributionControl: false,
             maxZoom: 21
-        }).setView([defaultLat, defaultLng], 15);
+        }).setView([defaultLat, defaultLng], 16);
 
         L.control.zoom({
             position: 'bottomright'
