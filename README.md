@@ -2,7 +2,7 @@
 
 Modul **PetaCCTV** adalah platform Sistem Informasi Geografis (GIS) terpadu untuk lingkungan **OpenSID** yang dirancang khusus untuk menampilkan lokasi kamera pemantauan (CCTV) langsung (live streaming) serta penandaan koordinat geografis Point of Interest (POI) desa—seperti Sekolah, Masjid, Kantor Desa, Tempat Wisata, Pasar, dan Fasilitas Kesehatan.
 
-Modul ini telah ditingkatkan dari pemantau video sederhana menjadi utilitas pemetaan wilayah desa yang komprehensif, cepat, dan mudah dikelola oleh perangkat desa.
+Modul ini telah ditingkatkan dari pemantau video sederhana menjadi utilitas pemetaan wilayah desa yang komprehensif, cepat, mandiri (plug-and-play), dan mudah dikelola oleh perangkat desa.
 
 ---
 
@@ -24,16 +24,35 @@ Modul ini telah ditingkatkan dari pemantau video sederhana menjadi utilitas peme
 *   **Pencarian & Penyaringan Server-Side**: Menggunakan integrasi *DataTables* berkinerja tinggi untuk memilah data berdasarkan Kategori, Status Kesehatan, Keaktifan, dan Visibilitas Publik.
 *   **Sakelar Mini (Ultra-Compact Toggle Switches)**: Antarmuka sakelar keaktifan dan visibilitas publik yang super ringkas (lebar `60px` dengan tinggi `18px`) dan hemat ruang pada baris tabel administrasi.
 
+### 3. 🌤️ Widget Informasi Cuaca Desa (Weather Widget)
+*   **Integrasi OpenWeatherMap API**: Menampilkan ramalan cuaca real-time yang akurat langsung dari OpenWeatherMap 5-Day/3-Hour Forecast API.
+*   **Peta Koordinat Presisi**: Mengambil koordinat pusat desa secara dinamis langsung dari pengaturan profil **Identitas Desa** OpenSID untuk keakuratan cuaca lokal tanpa pengaturan manual.
+*   **Desain Dinamis & Responsif**: Menampilkan suhu saat ini dengan ikon ramalan cuaca berukuran besar, deskripsi cuaca, tingkat kelembaban, serta kecepatan angin terkonversi (`km/h`).
+*   **Prakiraan 3 Periode**: Menyediakan ramalan cuaca 3 periode (9 jam ke depan) lengkap dengan suhu, ikon, dan waktu prakiraan yang tersusun secara horizontal dan presisi.
+*   **Auto-Minimalkan (Collapsible Pill Mode)**: Fitur penciutan cerdas yang mengubah kartu cuaca menjadi status pill ringkas untuk menghemat ruang layar. Secara bawaan (*default*), widget berstatus ciut (*collapsed*) saat pertama kali dibuka.
+*   **Visibilitas & Persistence**: Menyimpan status minimized dan tombol visibilitas secara lokal di peramban (*localStorage*) dengan key `weather_minimized_v2` sehingga preferensi pengguna tidak hilang saat halaman dimuat ulang.
+
 ---
 
 ## 🛠️ Arsitektur Teknologi
 
-*   **Framework Core**: OpenSID / CodeIgniter 3
-*   **Peta Digital**: LeafletJS v1.9.4 & Leaflet.markercluster
+*   **Framework Core**: OpenSID / CodeIgniter 3 dengan Laravel Service Container.
+*   **Peta Digital**: LeafletJS v1.9.4 & Leaflet.markercluster.
 *   **Streaming Engine**: Hls.js (untuk protokol HLS/M3U8), Dukungan Embed YouTube, dan IFrame Umum.
-*   **Desain Antarmuka**: Tailwind CSS (Frontend) & AdminLTE Bootstrap v3 (Backend).
+*   **Penyedia Cuaca**: OpenWeatherMap 5-Day/3-Hour Forecast API.
+*   **Manajemen Aset**: Dynamic Asset Replicator (Auto-publishing aset modul dari `Assets/` ke public `assets/modules/cctv/` pada saat booting).
+*   **Desain Antarmuka**: Tailwind CSS Kompilasi Offline (Frontend) & AdminLTE Bootstrap v3 (Backend).
 *   **Ikonografi**: FontAwesome v6.4.0 (Akses ke ribuan ikon modern).
 *   **Data Transport**: AJAX, Datatables Server-Side, & RESTful JSON endpoints.
+
+---
+
+## 📦 Manajemen Aset Mandiri (Plug-and-Play)
+
+Untuk menjamin modul ini **100% plug-and-play** dan tidak mengotori atau memodifikasi direktori global OpenSID Anda, modul ini dirancang dengan arsitektur mandiri:
+*   Semua file aset (seperti kompilasi offline `tailwind.min.css`) disimpan di dalam repositori modul di folder `Assets/`.
+*   Pada saat modul dijalankan pertama kali di lingkungan manapun (termasuk server produksi), `PetaCCTVServiceProvider` secara otomatis mendeteksi dan mereplikasi file-file tersebut ke folder public `assets/modules/cctv/css/` dengan aman.
+*   Hal ini menyelesaikan masalah purging sistem Tailwind CSS di server produksi Anda, menjamin keutuhan kode saat modul dipindahkan, dan membuat modul ini aman dipasang/dicopot sewaktu-waktu tanpa meninggalkan sampah berkas.
 
 ---
 
@@ -41,11 +60,14 @@ Modul ini telah ditingkatkan dari pemantau video sederhana menjadi utilitas peme
 
 ```bash
 Modules/PetaCCTV/
-├── 1_cctv_setup_manual.sql  # SQL dasar untuk inisialisasi tabel
-├── Config/                  # Konfigurasi Modul
+├── 1_cctv_setup_manual.sql    # SQL dasar untuk inisialisasi tabel & pengaturan awal
+├── Assets/                    # Aset Mandiri Modul (Self-Contained)
+│   └── css/
+│       └── tailwind.min.css   # Kompilasi offline stylesheet Tailwind CSS
+├── Config/                    # Konfigurasi Modul
 ├── Database/
-│   ├── Migrations/          # Migrasi Skema Database
-│   └── Seeders/             # Data Awal / Contoh Kategori & Kamera
+│   ├── Migrations/            # Migrasi Skema Database
+│   └── Seeders/               # Data Awal / Contoh Kategori & Kamera
 ├── Http/
 │   └── Controllers/
 │       ├── BackEnd/
@@ -53,16 +75,24 @@ Modules/PetaCCTV/
 │       └── FrontEnd/
 │           └── CctvController.php      # Kontroler Peta Publik (Frontend)
 ├── Models/
-│   ├── CctvCamera.php       # Model Data Kamera & Tempat
-│   └── CctvCategory.php     # Model Data Kategori Tempat
+│   ├── CctvCamera.php         # Model Data Kamera & Tempat
+│   └── CctvCategory.php       # Model Data Kategori Tempat
+├── Providers/
+│   └── PetaCCTVServiceProvider.php # Booting & Replikator Aset Mandiri Otomatis
 ├── Views/
 │   ├── backend/
 │   │   └── camera/
-│   │       ├── form.blade.php  # Form Tambah/Ubah Kamera & Tempat
+│   │       ├── form.blade.php  # Form Tambah/Ubah Kamera & Tempat (Interactive Picker)
 │   │       └── index.blade.php # Daftar Kamera & Dashboard Admin
 │   └── frontend/
-│       └── map.blade.php    # Peta Publik GIS & CCTV Utama
-└── README.md                # Dokumentasi Modul (Bahasa Indonesia)
+│       ├── map.blade.php      # Peta Publik GIS & CCTV Utama
+│       └── partials/          # Sub-views modular untuk kebersihan kode
+│           ├── header.blade.php
+│           ├── modal.blade.php
+│           ├── scripts.blade.php
+│           ├── toolbar.blade.php
+│           └── weather.blade.php # Widget cuaca desa modular
+└── README.md                  # Dokumentasi Modul (Bahasa Indonesia)
 ```
 
 ---

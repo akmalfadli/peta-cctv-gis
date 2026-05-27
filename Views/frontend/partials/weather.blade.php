@@ -3,17 +3,17 @@
     <div id="weather_overlay"
         class="absolute top-4 right-4 z-[1000] bg-white/90 backdrop-blur-md border border-ops-border shadow-lg rounded-lg p-3 w-60 text-slate-800 transition-all duration-300 font-sans select-none">
         <!-- Header -->
-        <div id="weather_header" class="flex items-center justify-between border-b border-ops-border pb-1.5 mb-2">
+        <div id="weather_header" class="flex items-center justify-between">
             <div class="flex items-center space-x-1.5 text-ops-primary">
                 <i class="fa-solid fa-cloud-sun text-xs text-ops-primary/80 animate-pulse"></i>
                 <span class="text-[9px] font-extrabold uppercase tracking-wider">CUACA DESA</span>
             </div>
-            <button id="btn_hide_weather" class="text-slate-400 hover:text-slate-600 transition" title="Minimalkan">
-                <i id="weather_minimize_icon" class="fa-solid fa-chevron-up text-xs"></i>
+            <button id="btn_hide_weather" class="text-slate-400 hover:text-slate-600 transition" title="Maksimalkan">
+                <i id="weather_minimize_icon" class="fa-solid fa-chevron-down text-xs"></i>
             </button>
         </div>
         <!-- Body -->
-        <div id="weather_content" class="flex flex-col gap-2">
+        <div id="weather_content" class="flex flex-col gap-2 hidden">
             <div id="weather_loading" class="flex items-center justify-center py-4 text-xs text-slate-500 font-semibold">
                 <i class="fa-solid fa-spinner animate-spin mr-2"></i> MEMUAT DATA...
             </div>

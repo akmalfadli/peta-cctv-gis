@@ -117,9 +117,23 @@
             fetchWeather();
         }
 
-        // Restore minimized state from localStorage on load
-        var weatherMinimized = localStorage.getItem('weather_minimized');
-        if (weatherMinimized === 'true') {
+        // Restore minimized state from localStorage on load (Default is collapsed)
+        var weatherMinimized = localStorage.getItem('weather_minimized_v2');
+        if (weatherMinimized === 'false') {
+            // Expand the widget
+            var weatherContent = document.getElementById('weather_content');
+            var weatherHeader = document.getElementById('weather_header');
+            var minimizeIcon = document.getElementById('weather_minimize_icon');
+            if (weatherContent) weatherContent.classList.remove('hidden');
+            if (weatherHeader) {
+                weatherHeader.classList.add('border-b', 'border-ops-border', 'pb-1.5', 'mb-2');
+            }
+            if (btnHideWeather) btnHideWeather.setAttribute('title', 'Minimalkan');
+            if (minimizeIcon) {
+                minimizeIcon.className = 'fa-solid fa-chevron-up text-xs';
+            }
+        } else {
+            // Keep collapsed by default
             var weatherContent = document.getElementById('weather_content');
             var weatherHeader = document.getElementById('weather_header');
             var minimizeIcon = document.getElementById('weather_minimize_icon');
@@ -167,7 +181,7 @@
                         if (minimizeIcon) {
                             minimizeIcon.className = 'fa-solid fa-chevron-up text-xs';
                         }
-                        localStorage.setItem('weather_minimized', 'false');
+                        localStorage.setItem('weather_minimized_v2', 'false');
                     } else {
                         weatherContent.classList.add('hidden');
                         if (weatherHeader) {
@@ -177,7 +191,7 @@
                         if (minimizeIcon) {
                             minimizeIcon.className = 'fa-solid fa-chevron-down text-xs';
                         }
-                        localStorage.setItem('weather_minimized', 'true');
+                        localStorage.setItem('weather_minimized_v2', 'true');
                     }
                 }
             });
