@@ -29,6 +29,8 @@ class GisCategory extends BaseModel
 
     protected $fillable = [
         'name',
+        'icon',
+        'color',
         'config_id',
     ];
 

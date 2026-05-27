@@ -105,6 +105,8 @@ class GisPublicController extends WebModulController
                     'stream_type' => $cam->stream_type,
                     'thumbnail' => $thumbUrl,
                     'category' => $cam->category ? $cam->category->name : 'Tanpa Kategori',
+                    'category_icon' => $cam->category ? $cam->category->icon : 'fa-video',
+                    'category_color' => $cam->category ? $cam->category->color : '#10b981',
                     'status' => $cam->status,
                     'last_online_at' => $cam->last_online_at ? $cam->last_online_at->format('Y-m-d H:i:s') : null,
                 ];
@@ -142,6 +144,8 @@ class GisPublicController extends WebModulController
             'stream_type' => $cam->stream_type,
             'thumbnail' => $thumbUrl,
             'category' => $cam->category ? $cam->category->name : 'Tanpa Kategori',
+            'category_icon' => $cam->category ? $cam->category->icon : 'fa-video',
+            'category_color' => $cam->category ? $cam->category->color : '#10b981',
             'status' => $cam->status,
             'last_online_at' => $cam->last_online_at ? $cam->last_online_at->format('Y-m-d H:i:s') : null,
         ]);

@@ -29,6 +29,8 @@
                                 <tr>
                                     <th width="50" class="text-center">No</th>
                                     <th>Nama Kategori</th>
+                                    <th width="120" class="text-center">Preview Marker</th>
+                                    <th width="150" class="text-center">Icon Class</th>
                                     <th width="150" class="text-center">Jumlah Kamera CCTV</th>
                                     <th width="150" class="text-center">Tanggal Dibuat</th>
                                     <th width="120" class="text-center">Aksi</th>
@@ -39,6 +41,12 @@
                                     <tr>
                                         <td class="text-center">{{ $index + 1 }}</td>
                                         <td><strong>{{ $cat->name }}</strong></td>
+                                        <td class="text-center">
+                                            <span style="display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: 6px; color: #fff; background-color: {{ $cat->color ?: '#10b981' }}; border: 2px solid #fff; box-shadow: 0 2px 4px rgba(0,0,0,0.15);">
+                                                <i class="fa {{ $cat->icon ?: 'fa-video' }}" style="font-size: 11px;"></i>
+                                            </span>
+                                        </td>
+                                        <td class="text-center"><code>{{ $cat->icon ?: 'fa-video' }}</code></td>
                                         <td class="text-center"><span class="label label-info">{{ $cat->cameras_count }} Kamera</span></td>
                                         <td class="text-center">{{ $cat->created_at ? $cat->created_at->format('d-m-Y H:i') : '-' }}</td>
                                         <td class="text-center">
@@ -46,6 +54,8 @@
                                                     class="btn btn-primary btn-xs btn-edit-category" 
                                                     data-id="{{ $cat->id }}" 
                                                     data-name="{{ $cat->name }}" 
+                                                    data-icon="{{ $cat->icon ?: 'fa-video' }}" 
+                                                    data-color="{{ $cat->color ?: '#10b981' }}" 
                                                     title="Edit Kategori">
                                                 <i class="fa fa-pencil"></i>
                                             </button>
@@ -69,7 +79,7 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="5" class="text-center text-muted" style="padding: 20px;">Belum ada data kategori GIS yang tersedia.</td>
+                                        <td colspan="7" class="text-center text-muted" style="padding: 20px;">Belum ada data kategori GIS yang tersedia.</td>
                                     </tr>
                                 @endforelse
                             </tbody>
@@ -79,7 +89,7 @@
             </div>
         </div>
     </section>
-
+ 
     <!-- Modal: Add Category -->
     <div class="modal fade" id="addCategoryModal" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog">
@@ -96,6 +106,19 @@
                             <input type="text" name="name" class="form-control" placeholder="Contoh: Jalan Protokol" required>
                         </div>
                     </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">Icon Marker <span class="text-danger">*</span></label>
+                        <div class="col-sm-9">
+                            <input type="text" name="icon" class="form-control" placeholder="Contoh: fa-video, fa-graduation-cap, fa-mosque" value="fa-video" required>
+                            <small class="text-muted">Masukkan class icon FontAwesome (misal: <code>fa-video</code>, <code>fa-graduation-cap</code>, <code>fa-mosque</code>, <code>fa-building</code>, <code>fa-store</code>, <code>fa-hospital</code>, <code>fa-flag</code>).</small>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">Warna Marker <span class="text-danger">*</span></label>
+                        <div class="col-sm-9">
+                            <input type="color" name="color" class="form-control" style="height: 38px; padding: 2px;" value="#10b981" required>
+                        </div>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Batal</button>
@@ -105,14 +128,14 @@
             </div>
         </div>
     </div>
-
+ 
     <!-- Modal: Edit Category -->
     <div class="modal fade" id="editCategoryModal" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title"><i class="fa fa-pencil"></i> Edit Nama Kategori GIS</h4>
+                    <h4 class="modal-title"><i class="fa fa-pencil"></i> Edit Kategori GIS</h4>
                 </div>
                 <form id="editCategoryForm" method="POST" class="form-horizontal">
                     <div class="modal-body">
@@ -120,6 +143,19 @@
                             <label class="col-sm-3 control-label">Nama Kategori <span class="text-danger">*</span></label>
                             <div class="col-sm-9">
                                 <input type="text" name="name" id="edit_category_name" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Icon Marker <span class="text-danger">*</span></label>
+                            <div class="col-sm-9">
+                                <input type="text" name="icon" id="edit_category_icon" class="form-control" required>
+                                <small class="text-muted">Class icon FontAwesome (misal: <code>fa-video</code>, <code>fa-graduation-cap</code>, <code>fa-mosque</code>).</small>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Warna Marker <span class="text-danger">*</span></label>
+                            <div class="col-sm-9">
+                                <input type="color" name="color" id="edit_category_color" class="form-control" style="height: 38px; padding: 2px;" required>
                             </div>
                         </div>
                     </div>
@@ -131,7 +167,7 @@
             </div>
         </div>
     </div>
-
+ 
     <!-- Modal: Delete Category Confirmation -->
     <div class="modal fade" id="deleteCategoryModal" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-sm">
@@ -151,7 +187,7 @@
         </div>
     </div>
 @endsection
-
+ 
 @push('scripts')
     <script>
         $(document).ready(function() {
@@ -159,12 +195,16 @@
             $('.btn-edit-category').on('click', function() {
                 var id = $(this).data('id');
                 var name = $(this).data('name');
+                var icon = $(this).data('icon');
+                var color = $(this).data('color');
                 
                 $('#edit_category_name').val(name);
+                $('#edit_category_icon').val(icon);
+                $('#edit_category_color').val(color);
                 $('#editCategoryForm').attr('action', "{{ site_url('gis_category/update') }}/" + id);
                 $('#editCategoryModal').modal('show');
             });
-
+ 
             // Delete trigger
             $('.btn-delete-category').on('click', function() {
                 var deleteUrl = $(this).data('href');

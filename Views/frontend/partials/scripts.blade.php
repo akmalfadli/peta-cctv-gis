@@ -457,37 +457,7 @@
             document.getElementById('stats_pembangunans').innerText = pembangunansCount;
         }
 
-        // Dynamic category icon and color mapper for cameras
-        function getCategoryIconAndColor(categoryName, isOnline) {
-            var name = (categoryName || '').toLowerCase();
-            var statusDot = isOnline ? 'bg-emerald-500' : 'bg-rose-500';
 
-            // Defaults (Standard CCTV)
-            var iconClass = 'fa-solid fa-video';
-            var bgColor = isOnline ? '#10b981' : '#ef4444'; // Emerald-500 / Rose-500
-
-            if (name.includes('sekolah') || name.includes('school') || name.includes('sd') || name.includes('smp') || name.includes('sma') || name.includes('madrasah') || name.includes('tk') || name.includes('paud')) {
-                iconClass = 'fa-solid fa-graduation-cap';
-                bgColor = '#3b82f6'; // Blue-500
-            } else if (name.includes('masjid') || name.includes('mosque') || name.includes('mushola') || name.includes('ibadah')) {
-                iconClass = 'fa-solid fa-mosque';
-                bgColor = '#0d9488'; // Teal-600
-            } else if (name.includes('kantor') || name.includes('office') || name.includes('dinas') || name.includes('balai') || name.includes('pemerintah')) {
-                iconClass = 'fa-solid fa-building';
-                bgColor = '#475569'; // Slate-600
-            } else if (name.includes('wisata') || name.includes('tourist') || name.includes('pantai') || name.includes('taman') || name.includes('rekreasi') || name.includes('curug') || name.includes('atraksi')) {
-                iconClass = 'fa-solid fa-mountain-sun';
-                bgColor = '#db2777'; // Pink-600
-            } else if (name.includes('pasar') || name.includes('market') || name.includes('toko') || name.includes('warung') || name.includes('mart')) {
-                iconClass = 'fa-solid fa-store';
-                bgColor = '#ea580c'; // Orange-600
-            } else if (name.includes('puskesmas') || name.includes('kesehatan') || name.includes('klinik') || name.includes('posyandu') || name.includes('dokter') || name.includes('medis')) {
-                iconClass = 'fa-solid fa-house-chimney-medical';
-                bgColor = '#e11d48'; // Rose-600
-            }
-
-            return { iconClass: iconClass, bgColor: bgColor, statusDot: statusDot };
-        }
 
         // Render camera markers
         function renderCameras() {
@@ -496,16 +466,27 @@
 
             camerasData.forEach((cam) => {
                 var isOnline = cam.status === 'online';
-                var categoryName = cam.category || '';
-                var iconInfo = getCategoryIconAndColor(categoryName, isOnline);
                 var hasStream = !!cam.stream_url;
+
+                // Determine icon class from database config
+                var iconClass = cam.category_icon || 'fa-solid fa-video';
+                
+                // Add standard FontAwesome v5/v6 brand or solid namespaces if missing
+                if (!iconClass.includes(' ') && iconClass.startsWith('fa-')) {
+                    iconClass = 'fa-solid ' + iconClass;
+                } else if (!iconClass.includes(' ') && !iconClass.startsWith('fa-')) {
+                    iconClass = 'fa-solid fa-' + iconClass;
+                }
+
+                var bgColor = cam.category_color || '#10b981';
+                var statusDot = isOnline ? 'bg-emerald-500' : 'bg-rose-500';
 
                 // DivIcon
                 var iconHtml = `
-                    <div class="relative w-7 h-7 flex items-center justify-center rounded-lg text-white shadow-md border-2 border-white transition-all duration-200" style="background-color: ${iconInfo.bgColor}">
-                        <i class="${iconInfo.iconClass} text-[10px]"></i>
+                    <div class="relative w-7 h-7 flex items-center justify-center rounded-lg text-white shadow-md border-2 border-white transition-all duration-200" style="background-color: ${bgColor}">
+                        <i class="${iconClass} text-[10px]"></i>
                         ${hasStream ? `
-                            <span class="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full border border-white ${iconInfo.statusDot} ${isOnline ? 'live-pulse' : ''}"></span>
+                            <span class="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full border border-white ${statusDot} ${isOnline ? 'live-pulse' : ''}"></span>
                         ` : ''}
                     </div>
                 `;

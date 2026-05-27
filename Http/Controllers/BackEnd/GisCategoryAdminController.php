@@ -51,6 +51,8 @@ class GisCategoryAdminController extends AdminModulController
         isCan('u', $this->modul_ini);
 
         $name = trim(ci()->input->post('name') ?: '');
+        $icon = trim(ci()->input->post('icon') ?: 'fa-video');
+        $color = trim(ci()->input->post('color') ?: '#10b981');
 
         if (empty($name)) {
             set_session('error', 'Nama kategori tidak boleh kosong.');
@@ -63,6 +65,8 @@ class GisCategoryAdminController extends AdminModulController
             GisCategory::create([
                 'config_id' => identitas('id'),
                 'name' => $name,
+                'icon' => $icon,
+                'color' => $color,
             ]);
 
             DB::commit();
@@ -84,6 +88,8 @@ class GisCategoryAdminController extends AdminModulController
 
         $category = GisCategory::findOrFail($id);
         $name = trim(ci()->input->post('name') ?: '');
+        $icon = trim(ci()->input->post('icon') ?: 'fa-video');
+        $color = trim(ci()->input->post('color') ?: '#10b981');
 
         if (empty($name)) {
             set_session('error', 'Nama kategori tidak boleh kosong.');
@@ -95,6 +101,8 @@ class GisCategoryAdminController extends AdminModulController
         try {
             $category->update([
                 'name' => $name,
+                'icon' => $icon,
+                'color' => $color,
             ]);
 
             DB::commit();

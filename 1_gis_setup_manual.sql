@@ -9,6 +9,8 @@ CREATE TABLE IF NOT EXISTS `gis_categories` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `config_id` int(11) DEFAULT NULL,
   `name` varchar(255) NOT NULL,
+  `icon` varchar(100) NOT NULL DEFAULT 'fa-video',
+  `color` varchar(50) NOT NULL DEFAULT '#10b981',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
@@ -69,16 +71,16 @@ CREATE TABLE IF NOT EXISTS `gis_pembangunans` (
 
 
 -- 4. Seed Default Categories (Assume config_id = 1)
-INSERT INTO `gis_categories` (`id`, `config_id`, `name`, `created_at`, `updated_at`) VALUES
-(1, 1, 'Kantor Desa', NOW(), NOW()),
-(2, 1, 'Sekolah', NOW(), NOW()),
-(3, 1, 'Masjid/Mushola', NOW(), NOW()),
-(4, 1, 'Jalan Raya', NOW(), NOW()),
-(5, 1, 'Wisata', NOW(), NOW()),
-(6, 1, 'Pasar', NOW(), NOW()),
-(7, 1, 'Parkir', NOW(), NOW()),
-(8, 1, 'Sungai', NOW(), NOW())
-ON DUPLICATE KEY UPDATE `name` = VALUES(`name`);
+INSERT INTO `gis_categories` (`id`, `config_id`, `name`, `icon`, `color`, `created_at`, `updated_at`) VALUES
+(1, 1, 'Kantor Desa', 'fa-building', '#475569', NOW(), NOW()),
+(2, 1, 'Sekolah', 'fa-graduation-cap', '#3b82f6', NOW(), NOW()),
+(3, 1, 'Masjid/Mushola', 'fa-mosque', '#0d9488', NOW(), NOW()),
+(4, 1, 'Jalan Raya', 'fa-road', '#ea580c', NOW(), NOW()),
+(5, 1, 'Wisata', 'fa-mountain-sun', '#db2777', NOW(), NOW()),
+(6, 1, 'Pasar', 'fa-store', '#ea580c', NOW(), NOW()),
+(7, 1, 'Parkir', 'fa-square-parking', '#64748b', NOW(), NOW()),
+(8, 1, 'Sungai', 'fa-water', '#06b6d4', NOW(), NOW())
+ON DUPLICATE KEY UPDATE `name` = VALUES(`name`), `icon` = VALUES(`icon`), `color` = VALUES(`color`);
 
 
 -- 5. Seed Sample Active Cameras
